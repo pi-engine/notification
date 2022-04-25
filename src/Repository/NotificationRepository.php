@@ -51,7 +51,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     public function getList($params, array $account)
     {
         $sql       = new Sql($this->db);
-        $select    = $sql->select('notification_noti');
+        $select    = $sql->select($this->tableNotification);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
