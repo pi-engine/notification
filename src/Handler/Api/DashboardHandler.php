@@ -19,40 +19,45 @@ class DashboardHandler implements RequestHandlerInterface
     protected StreamFactoryInterface $streamFactory;
 
     /** @var NotificationService */
-    protected NotificationService $adjustmentService;
-
+    protected NotificationService $notificationService;
 
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory,
-        NotificationService $adjustmentService
+        StreamFactoryInterface   $streamFactory,
+        NotificationService      $notificationService
     )
     {
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
-        $this->adjustmentService = $adjustmentService;
+        $this->notificationService = $notificationService;
     }
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // Get account
         $account = $request->getAttribute('account');
+
+        // Get request body
+        $requestBody = $request->getParsedBody();
 
         // Set record params
         $params = [
             'user_id' => $account['id'],
         ];
 
+        // Get list of notification
+        $result = $this->notificationService->getList($requestBody, $account);
 
 
         // Get record
-        $result = [];
+        // $result = [];
 
         // Set result
         $result = [
             'result' => true,
-            'data'   => $result,
-            'error'  => [],
+            'data' => $result,
+            'error' => [],
         ];
 
         return new JsonResponse($result);

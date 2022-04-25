@@ -6,9 +6,11 @@ use Interop\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Hydrator\ReflectionHydrator;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Notification\Model\Notification\Notification;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Notification\Repository\NotificationRepository;
+
 
 class NotificationRepositoryFactory implements FactoryInterface
 {
@@ -25,7 +27,8 @@ class NotificationRepositoryFactory implements FactoryInterface
     {
         return new NotificationRepository(
             $container->get(AdapterInterface::class),
-            new ReflectionHydrator()
+            new ReflectionHydrator(),
+            new Notification(0,0,0,0,0,0,0,0,0)
         );
     }
 }
