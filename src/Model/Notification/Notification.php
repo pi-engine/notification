@@ -12,7 +12,11 @@ class Notification
     private $type;
     private $status;
     private $message_id;
+    private $message;
+    private $messageType;
     private $parent_id;
+    private $target;
+    private $platform;
 
     public function __construct(
         $sender_id,
@@ -22,19 +26,19 @@ class Notification
         $type,
         $message_id,
         $parent_id,
-        $status ,
+        $status,
         $id = null
     )
     {
-        $this->sender_id=$sender_id;
-        $this->receiver_id=$receiver_id;
-        $this->platform_id=$platform_id;
-        $this->target_id=$target_id;
-        $this->type=$type;
-        $this->message_id=$message_id;
-        $this->parent_id=$parent_id;
-        $this->status =$status;
-        $this->id =$id;
+        $this->sender_id = $sender_id;
+        $this->receiver_id = $receiver_id;
+        $this->platform_id = $platform_id;
+        $this->target_id = $target_id;
+        $this->type = $type;
+        $this->message_id = $message_id;
+        $this->parent_id = $parent_id;
+        $this->status = $status;
+        $this->id = $id;
     }
 
     /**
@@ -69,6 +73,13 @@ class Notification
         return $this->platform_id;
     }
 
+
+    /// set target object in notification list
+    public function setPlatform($value)
+    {
+        $this->platform = $value;
+    }
+
     /**
      * @return int
      */
@@ -76,6 +87,14 @@ class Notification
     {
         return $this->target_id;
     }
+
+
+    /// set target object in notification list
+    public function setTarget($value)
+    {
+        $this->target = $value;
+    }
+
 
     /**
      * @return int
@@ -85,12 +104,25 @@ class Notification
         return $this->type;
     }
 
+    /// set message type object in notification list
+    public function setMessageType($value)
+    {
+        $this->messageType = $value;
+    }
+
     /**
      * @return int
      */
     public function getMessageId(): int
     {
         return $this->message_id;
+    }
+
+
+    /// set message object in notification list
+    public function setMessage($value)
+    {
+        $this->message = $value;
     }
 
     /**
@@ -108,4 +140,5 @@ class Notification
     {
         return $this->parent_id;
     }
+
 }

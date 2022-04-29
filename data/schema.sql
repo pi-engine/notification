@@ -1,4 +1,4 @@
- CREATE TABLE IF NOT EXISTS `notification_id_vlaue` (
+ CREATE TABLE IF NOT EXISTS `notification_id_value` (
                                          `id` int(10) NOT NULL,
                                          `title` varchar(255) NOT NULL DEFAULT '',
                                          `type` varchar(255) NOT NULL DEFAULT '',
@@ -8,10 +8,10 @@
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `notification_id_vlaue`
+-- Dumping data for table `notification_id_value`
 --
 
-INSERT INTO `notification_id_vlaue` (`id`, `title`, `type`, `time_create`, `time_update`, `time_delete`) VALUES
+INSERT INTO `notification_id_value` (`id`, `title`, `type`, `time_create`, `time_update`, `time_delete`) VALUES
                                                                                                              (1, 'Firebase', 'platform', 1650735005, 0, 0),
                                                                                                              (2, 'PHP mailer', 'platform', 1650735005, 0, 0),
                                                                                                              (3, 'Faraz SMS', 'platform', 1650735005, 0, 0),
@@ -80,9 +80,9 @@ INSERT INTO `notification_noti` (`id`, `sender_id`, `receiver_id`, `platform_id`
 --
 
 --
--- Indexes for table `notification_id_vlaue`
+-- Indexes for table `notification_id_value`
 --
-ALTER TABLE `notification_id_vlaue`
+ALTER TABLE `notification_id_value`
     ADD PRIMARY KEY (`id`);
 
 --
@@ -102,9 +102,9 @@ ALTER TABLE `notification_noti`
 --
 
 --
--- AUTO_INCREMENT for table `notification_id_vlaue`
+-- AUTO_INCREMENT for table `notification_id_value`
 --
-ALTER TABLE `notification_id_vlaue`
+ALTER TABLE `notification_id_value`
     MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --

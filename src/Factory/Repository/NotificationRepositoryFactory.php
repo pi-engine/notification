@@ -6,6 +6,8 @@ use Interop\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Hydrator\ReflectionHydrator;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Notification\Model\IdValue\IdValue;
+use Notification\Model\Message\Message;
 use Notification\Model\Notification\Notification;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -16,8 +18,8 @@ class NotificationRepositoryFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param null|array         $options
+     * @param string $requestedName
+     * @param null|array $options
      *
      * @return NotificationRepository
      * @throws ContainerExceptionInterface
@@ -28,7 +30,9 @@ class NotificationRepositoryFactory implements FactoryInterface
         return new NotificationRepository(
             $container->get(AdapterInterface::class),
             new ReflectionHydrator(),
-            new Notification(0,0,0,0,0,0,0,0,0)
+            new Notification(0, 0, 0, 0, 0, 0, 0, 0, 0),
+            new Message(0, 0, 0, 0, 0),
+            new IdValue(0, 0, 0),
         );
     }
 }
