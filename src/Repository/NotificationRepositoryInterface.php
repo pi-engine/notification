@@ -4,5 +4,6 @@ namespace Notification\Repository;
 
 interface NotificationRepositoryInterface
 {
-    public function getList( $params,array $account);
+    public function getNotificationList( $params,array $account);
+    public function sendNotification( $params,array $account);
 }

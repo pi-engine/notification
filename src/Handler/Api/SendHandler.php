@@ -10,7 +10,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Notification\Service\NotificationService;
 
-class DashboardHandler implements RequestHandlerInterface
+class SendHandler implements RequestHandlerInterface
 {
     /** @var ResponseFactoryInterface */
     protected ResponseFactoryInterface $responseFactory;
@@ -47,7 +47,7 @@ class DashboardHandler implements RequestHandlerInterface
         ];
 
         // Get list of notifications
-        $result = $this->notificationService->getNotificationList($requestBody, $account);
+        $result = $this->notificationService->sendNotification($requestBody, $account);
 
 
         // Get record

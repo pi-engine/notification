@@ -32,6 +32,7 @@ return [
 
 //            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
             Handler\Api\DashboardHandler::class => Factory\Handler\Api\DashboardHandlerFactory::class,
+            Handler\Api\SendHandler::class => Factory\Handler\Api\SendHandlerFactory::class,
 //            Handler\InstallerHandler::class => Factory\Handler\InstallerHandlerFactory::class,
         ],
     ],
@@ -65,6 +66,27 @@ return [
                             ],
                         ],
                     ],
+                    'send' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/send',
+                            'defaults' => [
+                                'module' => 'notification',
+                                'section' => 'api',
+                                'package' => 'send',
+                                'handler' => 'send',
+                                'permissions' => 'notification-dashboard',
+                                'controller' => PipeSpec::class,
+                                'middleware' => new PipeSpec(
+                                    SecurityMiddleware::class,
+                                    AuthenticationMiddleware::class,
+//                                    AuthorizationMiddleware::class,
+                                    Handler\Api\SendHandler::class
+                                ),
+                            ],
+                        ],
+                    ],
+
                 ],
 
             ],

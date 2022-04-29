@@ -78,7 +78,7 @@ class NotificationRepository implements NotificationRepositoryInterface
         $this->idValuePrototype = $idValuePrototype;
     }
 
-    public function getList($params, array $account)
+    public function getNotificationList($params, array $account)
     {
         $sql = new Sql($this->db);
         $select = $sql->select($this->tableNotification);
@@ -191,5 +191,15 @@ class NotificationRepository implements NotificationRepositoryInterface
         $resultSet->initialize($result);
         /// TODO: set return object
         return $resultSet->toArray()[0]??null;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return notification status
+     */
+    public function sendNotification($params, array $account)
+    {
+        return 1;
     }
 }

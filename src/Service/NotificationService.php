@@ -25,10 +25,20 @@ class NotificationService implements ServiceInterface
      *
      * @return array
      */
-    public function getList($params, $account)
+    public function getNotificationList($params, $account)
     {
-
-        // Get account after update
-        return $this->notificationRepository->getList($params,$account);
+        // Get notifications list
+        return $this->notificationRepository->getNotificationList($params,$account);
+    }
+    /**
+     * @param $params
+     * @param $account
+     *
+     * @return array
+     */
+    public function sendNotification($params, $account)
+    {
+        // Get notifications list
+        return $this->notificationRepository->sendNotification($params,$account);
     }
 }
