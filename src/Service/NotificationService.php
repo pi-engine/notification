@@ -28,7 +28,22 @@ class NotificationService implements ServiceInterface
     public function getNotificationList($params, $account)
     {
         // Get notifications list
-        return $this->notificationRepository->getNotificationList($params,$account);
+        $limit  = (int)($params['limit'] ?? 10);
+        $page   = (int)($params['page'] ?? 1);
+        $order  = $params['order'] ?? ['time_created DESC', 'id DESC'];
+        $offset = ($page - 1) * $limit;
+        $userId = $account["id"];
+
+        // Set params
+        $listParams = [
+            'page'   => $page,
+            'limit'  => $limit,
+            'order'  => $order,
+            'offset' => $offset,
+            'user_id' => $userId,
+        ];
+
+        return $this->notificationRepository->getNotificationList($listParams);
     }
     /**
      * @param $params

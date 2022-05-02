@@ -78,12 +78,16 @@ class NotificationRepository implements NotificationRepositoryInterface
         $this->idValuePrototype = $idValuePrototype;
     }
 
-    public function getNotificationList($params, array $account)
+    public function getNotificationList($params)
     {
+
+        $where = ['receiver_id' => $params['user_id']];
+
         $sql = new Sql($this->db);
-        $select = $sql->select($this->tableNotification);
+        $select = $sql->select($this->tableNotification)->where($where)->order($params['order'])->offset($params['offset'])->limit($params['limit']);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result = $statement->execute();
+
 
         if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
             throw new RuntimeException(sprintf(
@@ -164,7 +168,7 @@ class NotificationRepository implements NotificationRepositoryInterface
         $resultSet = new HydratingResultSet($this->hydrator, $this->messagePrototype);
         $resultSet->initialize($result);
         /// TODO: set return object
-        return $resultSet->toArray()[0]??null;
+        return $resultSet->toArray()[0] ?? null;
     }
 
     /**
@@ -190,7 +194,7 @@ class NotificationRepository implements NotificationRepositoryInterface
         $resultSet = new HydratingResultSet($this->hydrator, $this->idValuePrototype);
         $resultSet->initialize($result);
         /// TODO: set return object
-        return $resultSet->toArray()[0]??null;
+        return $resultSet->toArray()[0] ?? null;
     }
 
     /**
