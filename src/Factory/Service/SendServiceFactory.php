@@ -4,6 +4,7 @@ namespace Notification\Factory\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Notification\Sender\Email\PhpMailer;
 use Notification\Service\SendService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -23,6 +24,7 @@ class SendServiceFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SendService
     {
         return new SendService(
+            $container->get(PhpMailer::class)
         );
     }
 }

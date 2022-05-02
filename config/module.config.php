@@ -17,6 +17,10 @@ return [
             Repository\NotificationRepository::class => Factory\Repository\NotificationRepositoryFactory::class,
             Service\NotificationService::class => Factory\Service\NotificationServiceFactory::class,
             Service\SendService::class => Factory\Service\SendServiceFactory::class,
+
+            Sender\Email\PhpMailer::class => Factory\Sender\Email\PhpMailerFactory::class,
+
+
 //            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
             Handler\Api\DashboardHandler::class => Factory\Handler\Api\DashboardHandlerFactory::class,
             Handler\Api\SendHandler::class => Factory\Handler\Api\SendHandlerFactory::class,
