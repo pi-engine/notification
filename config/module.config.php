@@ -19,17 +19,6 @@ return [
         'factories' => [
             Repository\NotificationRepository::class => Factory\Repository\NotificationRepositoryFactory::class,
             Service\NotificationService::class => Factory\Service\NotificationServiceFactory::class,
-
-            Repository\MessageRepository::class => Factory\Repository\MessageRepositoryFactory::class,
-            Service\MessageService::class => Factory\Service\MessageServiceFactory::class,
-
-            Repository\PlatformRepository::class => Factory\Repository\PlatformRepositoryFactory::class,
-            Service\PlatformService::class => Factory\Service\PlatformServiceFactory::class,
-
-            Repository\IdValueRepository::class => Factory\Repository\IdValueRepositoryFactory::class,
-            Service\IdValueService::class => Factory\Service\IdValueServiceFactory::class,
-
-
 //            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
             Handler\Api\DashboardHandler::class => Factory\Handler\Api\DashboardHandlerFactory::class,
             Handler\Api\SendHandler::class => Factory\Handler\Api\SendHandlerFactory::class,

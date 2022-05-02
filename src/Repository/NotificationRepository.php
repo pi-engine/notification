@@ -114,8 +114,7 @@ class NotificationRepository implements NotificationRepositoryInterface
             $notification->setPlatform(
                 $this->getIdValue(
                     [
-                        "id" => $notification->getPlatformId(),
-                        "type" => "platform"
+                        "id" => $notification->getPlatformId()
                     ]
                 )
             );
@@ -125,7 +124,6 @@ class NotificationRepository implements NotificationRepositoryInterface
                 $this->getIdValue(
                     [
                         "id" => $notification->getTargetId()
-                        , "type" => "target"
                     ]
                 )
             );
@@ -134,8 +132,7 @@ class NotificationRepository implements NotificationRepositoryInterface
             $notification->setMessageType(
                 $this->getIdValue(
                     [
-                        "id" => $notification->getType(),
-                        "type" => "type"
+                        "id" => $notification->getType()
                     ]
                 )
             );
@@ -179,7 +176,6 @@ class NotificationRepository implements NotificationRepositoryInterface
     public function getIdValue($params)
     {
         $sql = new Sql($this->db);
-
         $select = $sql->select($this->tableIdValue)->where($params);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result = $statement->execute();

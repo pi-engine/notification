@@ -53,7 +53,6 @@ class NotificationService implements ServiceInterface
      */
     public function sendNotification($params, $account)
     {
-        // Get notifications list
-        return $this->notificationRepository->sendNotification($params,$account);
+
     }
 }
