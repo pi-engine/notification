@@ -3,20 +3,26 @@
 namespace Notification\Service;
 
 use Notification\Repository\NotificationRepositoryInterface;
+use Notification\Service\SendService;
 
 class NotificationService implements ServiceInterface
 {
     /* @var NotificationRepositoryInterface */
     protected NotificationRepositoryInterface $notificationRepository;
 
+    /* @var SendService */
+    protected SendService $sendService;
+
 
     /**
      * @param NotificationRepositoryInterface $notificationRepository
      */
     public function __construct(
-        NotificationRepositoryInterface $notificationRepository
+        NotificationRepositoryInterface $notificationRepository,
+        SendService $sendService
     ) {
         $this->notificationRepository = $notificationRepository;
+        $this->sendService = $sendService;
     }
 
     /**

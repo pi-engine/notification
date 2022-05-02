@@ -12,13 +12,11 @@ return [
     'service_manager' => [
         'aliases' => [
             Repository\NotificationRepositoryInterface::class => Repository\NotificationRepository::class,
-            Repository\MessageRepositoryInterface::class => Repository\MessageRepository::class,
-            Repository\PlatformRepositoryInterface::class => Repository\PlatformRepository::class,
-            Repository\IdValueRepositoryInterface::class => Repository\IdValueRepository::class,
         ],
         'factories' => [
             Repository\NotificationRepository::class => Factory\Repository\NotificationRepositoryFactory::class,
             Service\NotificationService::class => Factory\Service\NotificationServiceFactory::class,
+            Service\SendService::class => Factory\Service\SendServiceFactory::class,
 //            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
             Handler\Api\DashboardHandler::class => Factory\Handler\Api\DashboardHandlerFactory::class,
             Handler\Api\SendHandler::class => Factory\Handler\Api\SendHandlerFactory::class,
@@ -75,9 +73,7 @@ return [
                             ],
                         ],
                     ],
-
                 ],
-
             ],
             // Admin section
             'admin_notification' => [
