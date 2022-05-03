@@ -41,10 +41,6 @@ class SendHandler implements RequestHandlerInterface
         // Get request body
         $requestBody = $request->getParsedBody();
 
-        // Set record params
-        $params = [
-            'user_id' => $account['id'],
-        ];
 
         // Get list of notifications
         $result = $this->notificationService->sendNotification($requestBody, $account);

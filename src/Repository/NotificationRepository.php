@@ -5,6 +5,7 @@ namespace Notification\Repository;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\Adapter\Driver\ResultInterface;
 use Laminas\Db\ResultSet\HydratingResultSet;
+use Laminas\Db\Sql\Insert;
 use Laminas\Db\Sql\Sql;
 use Laminas\Hydrator\HydratorInterface;
 use Notification\Model\IdValue\IdValue;
@@ -141,6 +142,70 @@ class NotificationRepository implements NotificationRepositoryInterface
         return $resultSet->toArray();
     }
 
+    public function getNotification($params)
+    {
+
+        $where = ['id' => $params['id']];
+
+        $sql = new Sql($this->db);
+        $select = $sql->select($this->tableNotification)->where($where);
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $result = $statement->execute();
+
+
+        if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
+            throw new RuntimeException(sprintf(
+                'Failed retrieving blog post with identifier "%s"; unknown database error.',
+                $params
+            ));
+        }
+
+        $resultSet = new HydratingResultSet($this->hydrator, $this->notificationPrototype);
+        $resultSet->initialize($result);
+        $resultSet->buffer();
+        foreach ($resultSet as $notification) {
+
+            /// add message object to list from message id
+            $notification->setMessage(
+                $this->getMessage(
+                    [
+                        "id" => $notification->getId()
+                    ]
+                )
+            );
+
+            /// add platform object to list from platform id
+            $notification->setPlatform(
+                $this->getIdValue(
+                    [
+                        "id" => $notification->getPlatformId()
+                    ]
+                )
+            );
+
+            /// add target object to list from target id
+            $notification->setTarget(
+                $this->getIdValue(
+                    [
+                        "id" => $notification->getTargetId()
+                    ]
+                )
+            );
+
+            /// add message type object to list from type id
+            $notification->setMessageType(
+                $this->getIdValue(
+                    [
+                        "id" => $notification->getType()
+                    ]
+                )
+            );
+        }
+
+        /// TODO : return a object
+        return $resultSet->toArray()[0];
+    }
+
 
     /**
      * @param array $params
@@ -196,10 +261,75 @@ class NotificationRepository implements NotificationRepositoryInterface
     /**
      * @param array $params
      *
-     * @return notification status
+     * @return notification
      */
-    public function sendNotification($params, array $account)
+    public function store($params)
     {
-        return 1;
+        $params["message_id"] = $this->storeMessage($params);
+        $notificationId = $this->storeNotification($params);
+        return $this->getNotification(["id"=>$notificationId]);
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return int $notificationId
+     */
+    public function storeNotification($params)
+    {
+        $data = array();
+        $data["id"] =null;
+        $data["message_id"] =$params["message_id"]??0;
+        $data["sender_id"] =$params["sender_id"]??0;
+        $data["receiver_id"] =$params["receiver_id"]??0;
+        $data["platform_id"] =$params["platform_id"]??0;
+        $data["target_id"] =$params["target_id"]??0;
+        $data["type"] =$params["type"]??0;
+        $data["status"] =$params["status"];
+        $data["time_create"] =time();
+        $insert = new Insert($this->tableNotification);
+        $insert->values($data);
+
+        $sql       = new Sql($this->db);
+        $statement = $sql->prepareStatementForSqlObject($insert);
+        $result    = $statement->execute();
+
+        if (!$result instanceof ResultInterface) {
+            throw new RuntimeException(
+                'Database error occurred during blog post insert operation'
+            );
+        }
+
+        return $result->getGeneratedValue();
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return int $messageId
+     */
+    public function storeMessage($params)
+    {
+        $data = array();
+        $data["id"] =null;
+        $data["title"] =$params["title"]??'';
+        $data["text"] =$params["text"]??'';
+        $data["image"] =$params["image"]??'';
+        $data["link"] =$params["link"]??'';
+        $data["time_create"] =time();
+        $insert = new Insert($this->tableMessage);
+        $insert->values($data);
+
+        $sql       = new Sql($this->db);
+        $statement = $sql->prepareStatementForSqlObject($insert);
+        $result    = $statement->execute();
+
+        if (!$result instanceof ResultInterface) {
+            throw new RuntimeException(
+                'Database error occurred during blog post insert operation'
+            );
+        }
+
+        return $result->getGeneratedValue();
     }
 }

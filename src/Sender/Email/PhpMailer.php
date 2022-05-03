@@ -11,8 +11,8 @@ class PhpMailer implements PhpMailerInterface
 
     }
 
-    public function send($params): bool
+    public function send($params): int
     {
-        return true;
+        return 1;
     }
 }

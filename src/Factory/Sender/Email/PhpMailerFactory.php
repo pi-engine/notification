@@ -4,7 +4,6 @@ namespace Notification\Factory\Sender\Email;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Repository\NotificationRepository;
 use Notification\Sender\Email\PhpMailer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
