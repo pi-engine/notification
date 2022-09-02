@@ -79,7 +79,7 @@ class NotificationRepository implements NotificationRepositoryInterface
         $this->idValuePrototype = $idValuePrototype;
     }
 
-    public function getNotificationList($params)
+    public function getNotificationList($params,$account)
     {
 
         $where = ['receiver_id' => $params['user_id']];
@@ -263,9 +263,9 @@ class NotificationRepository implements NotificationRepositoryInterface
      *
      * @return notification
      */
-    public function store($params)
+    public function store($params, $account)
     {
-        $params["message_id"] = $this->storeMessage($params);
+        $params["message_id"] = $this->storeMessage($params)["id"];
         $notificationId = $this->storeNotification($params);
         return $this->getNotification(["id"=>$notificationId]);
     }
@@ -275,7 +275,7 @@ class NotificationRepository implements NotificationRepositoryInterface
      *
      * @return int $notificationId
      */
-    public function storeNotification($params)
+    public function storeNotification($params, $account)
     {
         $data = array();
         $data["id"] =null;
@@ -308,10 +308,11 @@ class NotificationRepository implements NotificationRepositoryInterface
      *
      * @return int $messageId
      */
-    public function storeMessage($params)
+    public function storeMessage($params, $account)
     {
         $data = array();
         $data["id"] =null;
+        $data["sender_id"] =$account["id"];
         $data["title"] =$params["title"]??'';
         $data["text"] =$params["text"]??'';
         $data["image"] =$params["image"]??'';
@@ -330,6 +331,9 @@ class NotificationRepository implements NotificationRepositoryInterface
             );
         }
 
-        return $result->getGeneratedValue();
+
+        $message = $this->getMessage(["id"=>$result->getGeneratedValue()]);
+
+        return $message;
     }
 }

@@ -4,6 +4,7 @@ namespace Notification\Factory\Handler\Api;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Notification\Service\SendService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -27,7 +28,8 @@ class SendHandlerFactory implements FactoryInterface
         return new SendHandler(
             $container->get(ResponseFactoryInterface::class),
             $container->get(StreamFactoryInterface::class),
-            $container->get(NotificationService::class)
+            $container->get(NotificationService::class),
+            $container->get(SendService::class)
         );
     }
 }

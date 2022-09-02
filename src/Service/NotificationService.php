@@ -49,7 +49,7 @@ class NotificationService implements ServiceInterface
             'user_id' => $userId,
         ];
 
-        return $this->notificationRepository->getNotificationList($listParams);
+        return $this->notificationRepository->getNotificationList($listParams, $account);
     }
 
     /// TODO : handle send to group ( in there or in previous method that call this)
@@ -60,14 +60,18 @@ class NotificationService implements ServiceInterface
      *
      * @return array
      */
-    public function sendNotification($params, $account)
+    public function storeNotification($params, $account)
     {
         /// TODO : change type parameter for change send method type
-        $result =$this->sendService->sendNotification($params,'email');
-        $params["status"] = $result["status"];
-        $params["platform_id"] = $result["platform_id"];
-        $params["target_id"] = $result["target_id"];
-        $params["sender_id"] = $account["id"];
+//        $result =$this->sendService->sendNotification($params,'email');
+//        $params["status"] = $result["status"];
+//        $params["platform_id"] = $result["platform_id"];
+//        $params["target_id"] = $result["target_id"];
+//        $params["sender_id"] = $account["id"];
         return $this->notificationRepository->store($params);
+    }
+
+    public function draft($param, $account){
+        return  $this->notificationRepository->storeMessage($param, $account);
     }
 }

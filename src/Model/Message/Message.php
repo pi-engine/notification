@@ -5,12 +5,14 @@ namespace Notification\Model\Message;
 class Message
 {
     private $id;
+    private $sender_id;
     private $title;
     private $text;
     private $image;
     private $link;
 
     public function __construct(
+        $sender_id,
         $title,
         $text ,
         $image = null,
@@ -18,6 +20,7 @@ class Message
         $id = null
     )
     {
+        $this->sender_id=$sender_id;
         $this->title=$title;
         $this->text=$text;
         $this->image=$image;
@@ -31,6 +34,14 @@ class Message
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function  sender_id()
+    {
+        return $this->sender_id;
     }
 
     /**

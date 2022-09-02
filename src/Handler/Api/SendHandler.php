@@ -3,6 +3,7 @@
 namespace Notification\Handler\Api;
 
 use Laminas\Diactoros\Response\JsonResponse;
+use Notification\Service\SendService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,16 +22,21 @@ class SendHandler implements RequestHandlerInterface
     /** @var NotificationService */
     protected NotificationService $notificationService;
 
+    /** @var SendService */
+    protected SendService $sendService;
+
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface   $streamFactory,
-        NotificationService      $notificationService
+        NotificationService      $notificationService,
+        SendService      $sendService
     )
     {
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
         $this->notificationService = $notificationService;
+        $this->sendService = $sendService;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -42,9 +48,25 @@ class SendHandler implements RequestHandlerInterface
         $requestBody = $request->getParsedBody();
 
 
-        // Get list of notifications
-        $result = $this->notificationService->sendNotification($requestBody, $account);
+//        $result = $this->notificationService->sendNotification($requestBody, $account);
 
+
+
+
+        ///TODO: must resolve
+
+        switch ($requestBody["action"]){
+            ///test store message in draft
+            case "draft":
+                $result =  $this->notificationService->draft($requestBody, $account);
+                break;
+            case "send":
+                $result =  $this->sendService->sendNotification($requestBody, $account);
+                break;
+            default:
+                $result = [];
+                break;
+        }
 
         // Get record
         // $result = [];
