@@ -4,7 +4,9 @@ namespace Notification\Factory\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Sender\Mail\Push;
+use Notification\Sender\Mail\Mail;
+use Notification\Sender\Push\Push;
+use Notification\Sender\SMS\SMS;
 use Notification\Service\SendService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -24,7 +26,9 @@ class SendServiceFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SendService
     {
         return new SendService(
-            $container->get(Push::class)
+            $container->get(Mail::class),
+            $container->get(Push::class),
+            $container->get(SMS::class)
         );
     }
 }

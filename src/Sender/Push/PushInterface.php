@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Sender\SMS;
+namespace Notification\Sender\Push;
 
 interface PushInterface
 {

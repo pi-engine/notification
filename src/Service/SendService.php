@@ -3,7 +3,7 @@
 namespace Notification\Service;
 
 use Notification\Sender\Mail\Mail;
-use Notification\Sender\Mail\SMS;
+use Notification\Sender\SMS\SMS;
 use Notification\Sender\Push\Push;
 
 class SendService implements ServiceInterface
@@ -40,10 +40,10 @@ class SendService implements ServiceInterface
         $result = array();
         $result["platform"] = $type;
         switch ($type) {
-            case "email":
+            case "mail":
                 /// TODO : set target   (device , mailBox , browser , ...)
-                $result["target"] = "mailbox";
-                $result["status"] = $this->email->send($params);
+//                $result["target"] = "mailbox";
+                $result["status"] = $this->mail->send($params);
                 break;
             default:
                 /// TODO : add unknown platform for denied type

@@ -1,7 +1,6 @@
 <?php
 
-namespace Notification\Sender\SMS;
- 
+namespace Notification\Sender\SMS; 
 
 class SMS implements SMSInterface
 {
