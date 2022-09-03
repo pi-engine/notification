@@ -1,9 +1,9 @@
 <?php
 
-namespace Notification\Sender\Email;
+namespace Notification\Sender\Mail;
  
 
-class PhpMailer implements PhpMailerInterface
+class Mail implements MailInterface
 {
 
     public function __construct( )

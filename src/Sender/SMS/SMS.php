@@ -1,9 +1,9 @@
 <?php
 
-namespace Notification\Sender\Email;
+namespace Notification\Sender\SMS;
  
 
-class PhpMailer implements PhpMailerInterface
+class SMS implements SMSInterface
 {
 
     public function __construct( )

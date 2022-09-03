@@ -1,14 +1,14 @@
 <?php
 
-namespace Notification\Factory\Sender\Email;
+namespace Notification\Factory\Sender\Mail;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Sender\Email\PhpMailer;
+use Notification\Sender\Mail\Mail;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class PhpMailerFactory implements FactoryInterface
+class MailFactory implements FactoryInterface
 {
 
     /**
@@ -16,13 +16,13 @@ class PhpMailerFactory implements FactoryInterface
      * @param string $requestedName
      * @param null|array $options
      *
-     * @return PhpMailer
+     * @return Mail
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PhpMailer
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Mail
     {
-        return new PhpMailer(
+        return new Mail(
         );
     }
 }

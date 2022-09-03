@@ -2,19 +2,31 @@
 
 namespace Notification\Service;
 
-use Notification\Sender\Email\PhpMailer;
+use Notification\Sender\Mail\Mail;
+use Notification\Sender\Mail\SMS;
+use Notification\Sender\Push\Push;
 
 class SendService implements ServiceInterface
 {
 
-    /* @var PhpMailer */
-    protected PhpMailer $phpMailer;
+    /* @var Mail */
+    protected Mail $mail;
+
+    /* @var Push */
+    protected Push $push;
+
+    /* @var SMS */
+    protected SMS $sms;
 
     public function __construct(
-        PhpMailer $phpMailer
+        Mail $mail,
+        push $push,
+        SMS  $sms
     )
     {
-        $this->phpMailer = $phpMailer;
+        $this->mail = $mail;
+        $this->push = $push;
+        $this->sms = $sms;
     }
 
     /**
@@ -26,13 +38,12 @@ class SendService implements ServiceInterface
     public function sendNotification($params, $type)
     {
         $result = array();
+        $result["platform"] = $type;
         switch ($type) {
             case "email":
-                /// TODO : set platform id (phpMailer , FCM , ...)
-                $result["platform_id"] = 2;
-                /// TODO : set target id (device , mailBox , browser , ...)
-                $result["target_id"] = 4;
-                $result["status"] = $this->phpMailer->send($params);
+                /// TODO : set target   (device , mailBox , browser , ...)
+                $result["target"] = "mailbox";
+                $result["status"] = $this->email->send($params);
                 break;
             default:
                 /// TODO : add unknown platform for denied type

@@ -57,8 +57,9 @@ CREATE TABLE IF NOT EXISTS `notification_noti` (
                                      `id` int(10) NOT NULL,
                                      `sender_id` int(10) NOT NULL DEFAULT 0,
                                      `receiver_id` int(10) NOT NULL DEFAULT 0,
-                                     `platform_id` int(10) NOT NULL DEFAULT 0,
-                                     `target_id` int(10) NOT NULL DEFAULT 0,
+                                     `platform` varchar(255) NOT NULL DEFAULT '',
+                                     `provider` varchar(255) NOT NULL DEFAULT '',
+                                     `target`varchar(255) NOT NULL DEFAULT '',
                                      `type` int(10) NOT NULL DEFAULT 0,
                                      `status` int(10) NOT NULL DEFAULT 0,
                                      `message_id` int(10) NOT NULL DEFAULT 0,
@@ -72,8 +73,8 @@ CREATE TABLE IF NOT EXISTS `notification_noti` (
 -- Dumping data for table `notification_noti`
 --
 
- INSERT INTO `notification_noti` (`id`, `sender_id`, `receiver_id`, `platform_id`, `target_id`, `type`, `status`, `message_id`, `parent_id`, `time_create`, `time_update`, `time_delete`) VALUES
-     (1, 10, 11, 1, 6, 10, 0, 1, 0, 1650733902, 0, 0);
+ INSERT INTO `notification_noti` (`id`, `sender_id`, `receiver_id`, `platform`, `provider`, `target`, `type`, `status`, `message_id`, `parent_id`, `time_create`, `time_update`, `time_delete`) VALUES
+     (1, 10, 11, 1,  1, 6, 10, 0, 1, 0, 1650733902, 0, 0);
 
 --
 -- Indexes for dumped tables

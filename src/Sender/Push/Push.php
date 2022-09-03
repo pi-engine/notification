@@ -1,9 +1,9 @@
 <?php
 
-namespace Notification\Sender\Email;
+namespace Notification\Sender\Push;
  
 
-class PhpMailer implements PhpMailerInterface
+class Push implements PushInterface
 {
 
     public function __construct( )

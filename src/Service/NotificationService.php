@@ -62,12 +62,6 @@ class NotificationService implements ServiceInterface
      */
     public function storeNotification($params, $account)
     {
-        /// TODO : change type parameter for change send method type
-//        $result =$this->sendService->sendNotification($params,'email');
-//        $params["status"] = $result["status"];
-//        $params["platform_id"] = $result["platform_id"];
-//        $params["target_id"] = $result["target_id"];
-//        $params["sender_id"] = $account["id"];
         return $this->notificationRepository->store($params);
     }
 

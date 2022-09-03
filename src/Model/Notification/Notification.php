@@ -7,22 +7,22 @@ class Notification
     private $id;
     private $sender_id;
     private $receiver_id;
-    private $platform_id;
-    private $target_id;
+    private $platform;
+    private $provider;
+    private $target;
     private $type;
     private $status;
     private $message_id;
     private $message;
     private $messageType;
     private $parent_id;
-    private $target;
-    private $platform;
 
     public function __construct(
         $sender_id,
         $receiver_id,
-        $platform_id,
-        $target_id,
+        $platform,
+        $provider,
+        $target,
         $type,
         $message_id,
         $parent_id,
@@ -32,13 +32,110 @@ class Notification
     {
         $this->sender_id = $sender_id;
         $this->receiver_id = $receiver_id;
-        $this->platform_id = $platform_id;
-        $this->target_id = $target_id;
+        $this->platform = $platform;
+        $this->provider = $provider;
+        $this->target = $target;
         $this->type = $type;
         $this->message_id = $message_id;
         $this->parent_id = $parent_id;
         $this->status = $status;
         $this->id = $id;
+    }
+
+    /**
+     * @param mixed|null $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param mixed $sender_id
+     */
+    public function setSenderId($sender_id): void
+    {
+        $this->sender_id = $sender_id;
+    }
+
+    /**
+     * @param mixed $receiver_id
+     */
+    public function setReceiverId($receiver_id): void
+    {
+        $this->receiver_id = $receiver_id;
+    }
+
+    /**
+     * @param mixed $provider
+     */
+    public function setProvider($provider): void
+    {
+        $this->provider = $provider;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status): void
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @param mixed $message_id
+     */
+    public function setMessageId($message_id): void
+    {
+        $this->message_id = $message_id;
+    }
+
+    /**
+     * @param mixed $parent_id
+     */
+    public function setParentId($parent_id): void
+    {
+        $this->parent_id = $parent_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProvider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMessageType()
+    {
+        return $this->messageType;
     }
 
     /**
@@ -68,9 +165,9 @@ class Notification
     /**
      * @return int
      */
-    public function getPlatformId(): int
+    public function getPlatform(): string
     {
-        return $this->platform_id;
+        return $this->platform;
     }
 
 
@@ -85,7 +182,7 @@ class Notification
      */
     public function getTargetId(): int
     {
-        return $this->target_id;
+        return $this->target;
     }
 
 

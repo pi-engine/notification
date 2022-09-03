@@ -18,7 +18,9 @@ return [
             Service\NotificationService::class => Factory\Service\NotificationServiceFactory::class,
             Service\SendService::class => Factory\Service\SendServiceFactory::class,
 
-            Sender\Email\PhpMailer::class => Factory\Sender\Email\PhpMailerFactory::class,
+            Sender\Mail\Mail::class => Factory\Sender\Mail\MailFactory::class,
+            Sender\Push\Push::class => Factory\Sender\Push\PushFactory::class,
+            Sender\SMS\SMS::class => Factory\Sender\SMS\SMSFactory::class,
 
 
 //            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
