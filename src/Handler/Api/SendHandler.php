@@ -3,13 +3,13 @@
 namespace Notification\Handler\Api;
 
 use Laminas\Diactoros\Response\JsonResponse;
+use Notification\Service\NotificationService;
 use Notification\Service\SendService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Notification\Service\NotificationService;
 
 class SendHandler implements RequestHandlerInterface
 {
@@ -28,15 +28,14 @@ class SendHandler implements RequestHandlerInterface
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface   $streamFactory,
-        NotificationService      $notificationService,
-        SendService      $sendService
-    )
-    {
-        $this->responseFactory = $responseFactory;
-        $this->streamFactory = $streamFactory;
+        StreamFactoryInterface $streamFactory,
+        NotificationService $notificationService,
+        SendService $sendService
+    ) {
+        $this->responseFactory     = $responseFactory;
+        $this->streamFactory       = $streamFactory;
         $this->notificationService = $notificationService;
-        $this->sendService = $sendService;
+        $this->sendService         = $sendService;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -51,17 +50,28 @@ class SendHandler implements RequestHandlerInterface
 //        $result = $this->notificationService->sendNotification($requestBody, $account);
 
 
+        $information = [
+            'mail' => [
+
+            ],
+            'sms' => [
+
+            ],
+            'push' => [
+
+            ],
+        ];
 
 
         ///TODO: must resolve
 
-        switch ($requestBody["action"]){
+        switch ($requestBody["action"]) {
             ///test store message in draft
             case "draft":
-                $result =  $this->notificationService->draft($requestBody, $account);
+                $result = $this->notificationService->draft($requestBody, $account);
                 break;
             case "send":
-                $result =  $this->sendService->sendNotification($requestBody, $account);
+                $result = $this->sendService->sendNotification($requestBody, $account);
                 break;
             default:
                 $result = [];
@@ -74,8 +84,8 @@ class SendHandler implements RequestHandlerInterface
         // Set result
         $result = [
             'result' => true,
-            'data' => $result,
-            'error' => [],
+            'data'   => $result,
+            'error'  => [],
         ];
 
         return new JsonResponse($result);

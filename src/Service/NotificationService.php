@@ -13,7 +13,6 @@ class NotificationService implements ServiceInterface
     /* @var SendService */
     protected SendService $sendService;
 
-
     /**
      * @param NotificationRepositoryInterface $notificationRepository
      */

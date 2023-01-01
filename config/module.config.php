@@ -5,7 +5,6 @@ namespace Notification;
 use Laminas\Mvc\Middleware\PipeSpec;
 use Laminas\Router\Http\Literal;
 use User\Middleware\AuthenticationMiddleware;
-use User\Middleware\AuthorizationMiddleware;
 use User\Middleware\SecurityMiddleware;
 
 return [
@@ -18,15 +17,15 @@ return [
             Service\NotificationService::class => Factory\Service\NotificationServiceFactory::class,
             Service\SendService::class => Factory\Service\SendServiceFactory::class,
 
-            Sender\Mail\Mail::class => Factory\Sender\Mail\MailFactory::class,
-            Sender\Push\Push::class => Factory\Sender\Push\PushFactory::class,
-            Sender\SMS\SMS::class => Factory\Sender\SMS\SMSFactory::class,
+            Sender\Mail\Mail::class        => Factory\Sender\Mail\MailFactory::class,
+            Sender\Push\Push::class        => Factory\Sender\Push\PushFactory::class,
+            Sender\SMS\SMS::class          => Factory\Sender\SMS\SMSFactory::class,
 
 
-//            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
-            Handler\Api\DashboardHandler::class => Factory\Handler\Api\DashboardHandlerFactory::class,
+            //            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
+            Handler\Api\ListHandler::class => Factory\Handler\Api\ListHandlerFactory::class,
             Handler\Api\SendHandler::class => Factory\Handler\Api\SendHandlerFactory::class,
-//            Handler\InstallerHandler::class => Factory\Handler\InstallerHandlerFactory::class,
+            //            Handler\InstallerHandler::class => Factory\Handler\InstallerHandlerFactory::class,
         ],
     ],
     'router' => [
@@ -39,22 +38,21 @@ return [
                     'defaults' => [],
                 ],
                 'child_routes' => [
-                    'dashboard' => [
+                    'list' => [
                         'type' => Literal::class,
                         'options' => [
-                            'route' => '/dashboard',
+                            'route' => '/list',
                             'defaults' => [
                                 'module' => 'notification',
                                 'section' => 'api',
-                                'package' => 'dashboard',
-                                'handler' => 'dashboard',
-                                'permissions' => 'notification-dashboard',
+                                'package' => 'list',
+                                'handler' => 'list',
+                                'permissions' => 'notification-list',
                                 'controller' => PipeSpec::class,
                                 'middleware' => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
-//                                    AuthorizationMiddleware::class,
-                                    Handler\Api\DashboardHandler::class
+                                    Handler\Api\ListHandler::class
                                 ),
                             ],
                         ],
@@ -68,12 +66,11 @@ return [
                                 'section' => 'api',
                                 'package' => 'send',
                                 'handler' => 'send',
-                                'permissions' => 'notification-dashboard',
+                                'permissions' => 'notification-send',
                                 'controller' => PipeSpec::class,
                                 'middleware' => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
-//                                    AuthorizationMiddleware::class,
                                     Handler\Api\SendHandler::class
                                 ),
                             ],

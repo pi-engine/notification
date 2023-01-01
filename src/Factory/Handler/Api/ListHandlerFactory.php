@@ -8,23 +8,23 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Notification\Handler\Api\DashboardHandler;
+use Notification\Handler\Api\ListHandler;
 use Notification\Service\NotificationService;
 
-class DashboardHandlerFactory implements FactoryInterface
+class ListHandlerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param string             $requestedName
      * @param null|array         $options
      *
-     * @return DashboardHandler
+     * @return ListHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DashboardHandler
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ListHandler
     {
-        return new DashboardHandler(
+        return new ListHandler(
             $container->get(ResponseFactoryInterface::class),
             $container->get(StreamFactoryInterface::class),
             $container->get(NotificationService::class)
