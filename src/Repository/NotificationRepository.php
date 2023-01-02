@@ -5,12 +5,16 @@ namespace Notification\Repository;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\Adapter\Driver\ResultInterface;
 use Laminas\Db\ResultSet\HydratingResultSet;
+use Laminas\Db\Sql\Delete;
 use Laminas\Db\Sql\Insert;
+use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Sql;
+use Laminas\Db\Sql\Update;
 use Laminas\Hydrator\HydratorInterface;
 use Notification\Model\IdValue\IdValue;
 use Notification\Model\Notification\Notification;
 use Notification\Model\Message\Message;
+use Notification\Model\Storage;
 use RuntimeException;
 use InvalidArgumentException;
 
@@ -22,42 +26,17 @@ class NotificationRepository implements NotificationRepositoryInterface
      *
      * @var string
      */
-    private string $tableNotification = 'notification_noti';
-
-    /**
-     * Message Table name
-     *
-     * @var string
-     */
-    private string $tableMessage = 'notification_message';
-
-    /**
-     * IdValue Table name
-     *
-     * @var string
-     */
-    private string $tableIdValue = 'notification_id_value';
+    private string $tableNotification = 'notification_storage';
 
     /**
      * @var AdapterInterface
      */
     private AdapterInterface $db;
 
-
     /**
-     * @var Notification
+     * @var Storage
      */
-    private Notification $notificationPrototype;
-
-    /**
-     * @var Message
-     */
-    private Message $messagePrototype;
-
-    /**
-     * @var IdValue
-     */
-    private IdValue $idValuePrototype;
+    private Storage $storagePrototype;
 
     /**
      * @var HydratorInterface
@@ -65,230 +44,99 @@ class NotificationRepository implements NotificationRepositoryInterface
     private HydratorInterface $hydrator;
 
     public function __construct(
-        AdapterInterface  $db,
+        AdapterInterface $db,
         HydratorInterface $hydrator,
-        Notification      $notificationPrototype,
-        Message           $messagePrototype,
-        IdValue           $idValuePrototype
-    )
-    {
-        $this->db = $db;
-        $this->hydrator = $hydrator;
-        $this->notificationPrototype = $notificationPrototype;
-        $this->messagePrototype = $messagePrototype;
-        $this->idValuePrototype = $idValuePrototype;
-    }
-
-    public function getNotificationList($params,$account)
-    {
-
-        $where = ['receiver_id' => $params['user_id']];
-
-        $sql = new Sql($this->db);
-        $select = $sql->select($this->tableNotification)->where($where)->order($params['order'])->offset($params['offset'])->limit($params['limit']);
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
-
-
-        if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
-            throw new RuntimeException(sprintf(
-                'Failed retrieving blog post with identifier "%s"; unknown database error.',
-                $params
-            ));
-        }
-
-        $resultSet = new HydratingResultSet($this->hydrator, $this->notificationPrototype);
-        $resultSet->initialize($result);
-        $resultSet->buffer();
-        foreach ($resultSet as $notification) {
-
-            /// add message object to list from message id
-            $notification->setMessage(
-                $this->getMessage(
-                    [
-                        "id" => $notification->getId()
-                    ]
-                )
-            );
-
-            /// add platform object to list from platform id
-            $notification->setPlatform(
-                $this->getIdValue(
-                    [
-                        "id" => $notification->getPlatformId()
-                    ]
-                )
-            );
-
-            /// add target object to list from target id
-            $notification->setTarget(
-                $this->getIdValue(
-                    [
-                        "id" => $notification->getTargetId()
-                    ]
-                )
-            );
-
-            /// add message type object to list from type id
-            $notification->setMessageType(
-                $this->getIdValue(
-                    [
-                        "id" => $notification->getType()
-                    ]
-                )
-            );
-        }
-
-        return $resultSet->toArray();
-    }
-
-    public function getNotification($params)
-    {
-
-        $where = ['id' => $params['id']];
-
-        $sql = new Sql($this->db);
-        $select = $sql->select($this->tableNotification)->where($where);
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
-
-
-        if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
-            throw new RuntimeException(sprintf(
-                'Failed retrieving blog post with identifier "%s"; unknown database error.',
-                $params
-            ));
-        }
-
-        $resultSet = new HydratingResultSet($this->hydrator, $this->notificationPrototype);
-        $resultSet->initialize($result);
-        $resultSet->buffer();
-        foreach ($resultSet as $notification) {
-
-            /// add message object to list from message id
-            $notification->setMessage(
-                $this->getMessage(
-                    [
-                        "id" => $notification->getId()
-                    ]
-                )
-            );
-
-            /// add platform object to list from platform id
-            $notification->setPlatform(
-                $this->getIdValue(
-                    [
-                        "id" => $notification->getPlatformId()
-                    ]
-                )
-            );
-
-            /// add target object to list from target id
-            $notification->setTarget(
-                $this->getIdValue(
-                    [
-                        "id" => $notification->getTargetId()
-                    ]
-                )
-            );
-
-            /// add message type object to list from type id
-            $notification->setMessageType(
-                $this->getIdValue(
-                    [
-                        "id" => $notification->getType()
-                    ]
-                )
-            );
-        }
-
-        /// TODO : return a object
-        return $resultSet->toArray()[0];
-    }
-
-
-    /**
-     * @param array $params
-     *
-     * @return Message
-     */
-    public function getMessage($params)
-    {
-        $sql = new Sql($this->db);
-
-        $select = $sql->select($this->tableMessage)->where($params);
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
-
-        if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
-            throw new RuntimeException(sprintf(
-                'Failed retrieving message with id "%s"; unknown database error.',
-                $params["id"]
-            ));
-        }
-
-        $resultSet = new HydratingResultSet($this->hydrator, $this->messagePrototype);
-        $resultSet->initialize($result);
-        /// TODO: set return object
-        return $resultSet->toArray()[0] ?? null;
+        Storage $storagePrototype
+    ) {
+        $this->db               = $db;
+        $this->hydrator         = $hydrator;
+        $this->storagePrototype = $storagePrototype;
     }
 
     /**
      * @param array $params
      *
-     * @return IdValue ( object of id value type)
+     * @return HydratingResultSet|array
      */
-    public function getIdValue($params)
+    public function getNotificationList(array $params = []): HydratingResultSet|array
     {
-        $sql = new Sql($this->db);
-        $select = $sql->select($this->tableIdValue)->where($params);
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
-
-        if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
-            throw new RuntimeException(sprintf(
-                'Failed retrieving type with id "%s"; unknown database error.',
-                $params["id"]
-            ));
+        $where = [];
+        if (isset($params['user_id']) && !empty($params['user_id'])) {
+            $where['user_id'] = $params['user_id'];
+        }
+        if (isset($params['status']) && !empty($params['status'])) {
+            $where['status'] = $params['status'];
+        }
+        if (isset($params['viewed']) && !empty($params['viewed'])) {
+            $where['viewed'] = $params['viewed'];
+        }
+        if (isset($params['sent']) && !empty($params['sent'])) {
+            $where['sent'] = $params['sent'];
+        }
+        if (isset($params['id']) && !empty($params['id'])) {
+            $where['id'] = $params['id'];
         }
 
-        $resultSet = new HydratingResultSet($this->hydrator, $this->idValuePrototype);
+
+        $sql       = new Sql($this->db);
+        $select    = $sql->select($this->tableNotification)->where($where)->order($params['order'])->offset($params['offset'])->limit($params['limit']);
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $result    = $statement->execute();
+
+        if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
+            return [];
+        }
+
+        $resultSet = new HydratingResultSet($this->hydrator, $this->storagePrototype);
         $resultSet->initialize($result);
-        /// TODO: set return object
-        return $resultSet->toArray()[0] ?? null;
+
+        return $resultSet;
     }
 
     /**
      * @param array $params
      *
-     * @return notification
+     * @return int
      */
-    public function store($params, $account)
+    public function getNotificationCount(array $params = []): int
     {
-        $params["message_id"] = $this->storeMessage($params)["id"];
-        $notificationId = $this->storeNotification($params);
-        return $this->getNotification(["id"=>$notificationId]);
+        // Set where
+        $columns = ['count' => new Expression('count(*)')];
+        $where   = [];
+
+        if (isset($params['user_id']) && !empty($params['user_id'])) {
+            $where['user_id'] = $params['user_id'];
+        }
+        if (isset($params['status']) && !empty($params['status'])) {
+            $where['status'] = $params['status'];
+        }
+        if (isset($params['viewed']) && !empty($params['viewed'])) {
+            $where['viewed'] = $params['viewed'];
+        }
+        if (isset($params['sent']) && !empty($params['sent'])) {
+            $where['sent'] = $params['sent'];
+        }
+        if (isset($params['id']) && !empty($params['id'])) {
+            $where['id'] = $params['id'];
+        }
+
+        $sql       = new Sql($this->db);
+        $select    = $sql->select($this->tableNotification)->columns($columns)->where($where);
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $row       = $statement->execute()->current();
+
+        return (int)$row['count'];
     }
 
     /**
      * @param array $params
      *
-     * @return int $notificationId
+     * @return array|object
      */
-    public function storeNotification($params, $account)
+    public function addNotification(array $params): object|array
     {
-        $data = array();
-        $data["id"] =null;
-        $data["message_id"] =$params["message_id"]??0;
-        $data["sender_id"] =$params["sender_id"]??0;
-        $data["receiver_id"] =$params["receiver_id"]??0;
-        $data["platform_id"] =$params["platform_id"]??0;
-        $data["target_id"] =$params["target_id"]??0;
-        $data["type"] =$params["type"]??0;
-        $data["status"] =$params["status"];
-        $data["time_create"] =time();
         $insert = new Insert($this->tableNotification);
-        $insert->values($data);
+        $insert->values($params);
 
         $sql       = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($insert);
@@ -299,41 +147,81 @@ class NotificationRepository implements NotificationRepositoryInterface
                 'Database error occurred during blog post insert operation'
             );
         }
+        $id = $result->getGeneratedValue();
+        return $this->getNotification($id);
+    }
 
-        return $result->getGeneratedValue();
+    /**
+     * @param string $parameter
+     * @param string $type
+     *
+     * @return object|array
+     */
+    public function getNotification($parameter, $type = 'id'): object|array
+    {
+        $where = [$type => $parameter];
+
+        $sql       = new Sql($this->db);
+        $select    = $sql->select($this->tableNotification)->where($where);
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $result    = $statement->execute();
+
+        if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
+            throw new RuntimeException(
+                sprintf(
+                    'Failed retrieving blog post with identifier "%s"; unknown database error.',
+                    $parameter
+                )
+            );
+        }
+
+        $resultSet = new HydratingResultSet($this->hydrator, $this->itemPrototype);
+        $resultSet->initialize($result);
+        $item = $resultSet->current();
+
+        if (!$item) {
+            return [];
+        }
+
+        return $item;
     }
 
     /**
      * @param array $params
      *
-     * @return int $messageId
+     * @return array|object
      */
-    public function storeMessage($params, $account)
+    public function updateNotification(array $params): object|array
     {
-        $data = array();
-        $data["id"] =null;
-        $data["sender_id"] =$account["id"];
-        $data["title"] =$params["title"]??'';
-        $data["text"] =$params["text"]??'';
-        $data["image"] =$params["image"]??'';
-        $data["link"] =$params["link"]??'';
-        $data["time_create"] =time();
-        $insert = new Insert($this->tableMessage);
-        $insert->values($data);
+        $update = new Update($this->tableNotification);
+        $update->set($params);
+        $update->where(['id' => $params['id']]);
 
         $sql       = new Sql($this->db);
-        $statement = $sql->prepareStatementForSqlObject($insert);
+        $statement = $sql->prepareStatementForSqlObject($update);
         $result    = $statement->execute();
 
         if (!$result instanceof ResultInterface) {
             throw new RuntimeException(
-                'Database error occurred during blog post insert operation'
+                'Database error occurred during update operation'
             );
         }
+        return $this->getItem($params['id']);
+    }
 
+    /**
+     * @param array $params
+     *
+     * @return void
+     */
+    public function deleteNotification(array $params): void
+    {
+        $delete = new Delete($this->tableNotification);
+        $delete->set($params);
+        $delete->where(['id' => $params['id']]);
 
-        $message = $this->getMessage(["id"=>$result->getGeneratedValue()]);
-
-        return $message;
+        $sql       = new Sql($this->db);
+        $statement = $sql->prepareStatementForSqlObject($delete);
+        $statement->execute();
     }
 }

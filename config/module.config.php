@@ -21,11 +21,8 @@ return [
             Sender\Push\Push::class        => Factory\Sender\Push\PushFactory::class,
             Sender\SMS\SMS::class          => Factory\Sender\SMS\SMSFactory::class,
 
-
-            //            Middleware\ValidationMiddleware::class => Factory\Middleware\ValidationMiddlewareFactory::class,
             Handler\Api\ListHandler::class => Factory\Handler\Api\ListHandlerFactory::class,
             Handler\Api\SendHandler::class => Factory\Handler\Api\SendHandlerFactory::class,
-            //            Handler\InstallerHandler::class => Factory\Handler\InstallerHandlerFactory::class,
         ],
     ],
     'router' => [

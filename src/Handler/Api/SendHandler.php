@@ -46,15 +46,12 @@ class SendHandler implements RequestHandlerInterface
         // Get request body
         $requestBody = $request->getParsedBody();
 
-
-//        $result = $this->notificationService->sendNotification($requestBody, $account);
-
-
-        $information = [
+        // Set params
+        $params = [
             'mail' => [
 
             ],
-            'sms' => [
+            'sms'  => [
 
             ],
             'push' => [
@@ -62,31 +59,8 @@ class SendHandler implements RequestHandlerInterface
             ],
         ];
 
-
-        ///TODO: must resolve
-
-        switch ($requestBody["action"]) {
-            ///test store message in draft
-            case "draft":
-                $result = $this->notificationService->draft($requestBody, $account);
-                break;
-            case "send":
-                $result = $this->sendService->sendNotification($requestBody, $account);
-                break;
-            default:
-                $result = [];
-                break;
-        }
-
-        // Get record
-        // $result = [];
-
-        // Set result
-        $result = [
-            'result' => true,
-            'data'   => $result,
-            'error'  => [],
-        ];
+        // Send notification
+        $result = $this->notificationService->send($params);
 
         return new JsonResponse($result);
     }

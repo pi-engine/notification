@@ -24,12 +24,11 @@ class ListHandler implements RequestHandlerInterface
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface   $streamFactory,
-        NotificationService      $notificationService
-    )
-    {
-        $this->responseFactory = $responseFactory;
-        $this->streamFactory = $streamFactory;
+        StreamFactoryInterface $streamFactory,
+        NotificationService $notificationService
+    ) {
+        $this->responseFactory     = $responseFactory;
+        $this->streamFactory       = $streamFactory;
         $this->notificationService = $notificationService;
     }
 
@@ -44,21 +43,12 @@ class ListHandler implements RequestHandlerInterface
         // Set record params
         $params = [
             'user_id' => $account['id'],
+            'page'    => $requestBody['page'] ?? 1,
+            'limit'   => $requestBody['limit'] ?? 25,
         ];
 
         // Get list of notifications
-        $result = $this->notificationService->getNotificationList($requestBody, $account);
-
-
-        // Get record
-        // $result = [];
-
-        // Set result
-        $result = [
-            'result' => true,
-            'data' => $result,
-            'error' => [],
-        ];
+        $result = $this->notificationService->getNotificationList($params);
 
         return new JsonResponse($result);
     }
