@@ -3,14 +3,14 @@
 namespace Notification\Handler\Api;
 
 use Laminas\Diactoros\Response\JsonResponse;
-use Notification\Service\NotificationService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Notification\Service\NotificationService;
 
-class SendHandler implements RequestHandlerInterface
+class CountHandler implements RequestHandlerInterface
 {
     /** @var ResponseFactoryInterface */
     protected ResponseFactoryInterface $responseFactory;
@@ -20,6 +20,7 @@ class SendHandler implements RequestHandlerInterface
 
     /** @var NotificationService */
     protected NotificationService $notificationService;
+
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
@@ -36,24 +37,13 @@ class SendHandler implements RequestHandlerInterface
         // Get account
         $account = $request->getAttribute('account');
 
-        // Get request body
-        $requestBody = $request->getParsedBody();
-
-        // Set params
+        // Set record params
         $params = [
-            'mail' => [
-
-            ],
-            'sms'  => [
-
-            ],
-            'push' => [
-
-            ],
+            'user_id' => $account['id'],
         ];
 
-        // Send notification
-        $result = $this->notificationService->send($params);
+        // Get list of notifications
+        $result = $this->notificationService->getNotViewedCount($params);
 
         return new JsonResponse($result);
     }

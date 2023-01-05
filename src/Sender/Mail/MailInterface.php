@@ -4,5 +4,5 @@ namespace Notification\Sender\Mail;
 
 interface MailInterface
 {
-    public function send($params): int;
+    public function send($config, $params): void;
 }

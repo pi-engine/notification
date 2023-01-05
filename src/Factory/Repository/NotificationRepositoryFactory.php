@@ -9,10 +9,10 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Model\IdValue\IdValue;
 use Notification\Model\Message\Message;
 use Notification\Model\Notification\Notification;
+use Notification\Model\Storage;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Notification\Repository\NotificationRepository;
-
 
 class NotificationRepositoryFactory implements FactoryInterface
 {
@@ -30,9 +30,7 @@ class NotificationRepositoryFactory implements FactoryInterface
         return new NotificationRepository(
             $container->get(AdapterInterface::class),
             new ReflectionHydrator(),
-            new Notification(0, 0, 0, 0, 0, 0, 0, 0, 0),
-            new Message(0, 0, 0, 0, 0),
-            new IdValue(0, 0, 0),
+            new Storage(0, 0, 0, 0, 0, 0, 0),
         );
     }
 }

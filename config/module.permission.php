@@ -6,8 +6,30 @@ return [
             'module'      => 'notification',
             'section'     => 'api',
             'package'     => 'notification',
-            'handler'     => 'dashboard',
-            'permissions' => 'dashboard',
+            'handler'     => 'count',
+            'permissions' => 'notification-count',
+            'role'        => [
+                'member',
+                'admin',
+            ],
+        ],
+        [
+            'module'      => 'notification',
+            'section'     => 'api',
+            'package'     => 'notification',
+            'handler'     => 'list',
+            'permissions' => 'notification-list',
+            'role'        => [
+                'member',
+                'admin',
+            ],
+        ],
+        [
+            'module'      => 'notification',
+            'section'     => 'api',
+            'package'     => 'notification',
+            'handler'     => 'send',
+            'permissions' => 'notification-send',
             'role'        => [
                 'member',
                 'admin',

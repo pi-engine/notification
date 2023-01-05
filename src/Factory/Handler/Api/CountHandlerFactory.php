@@ -4,28 +4,27 @@ namespace Notification\Factory\Handler\Api;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Notification\Handler\Api\SendHandler;
+use Notification\Handler\Api\CountHandler;
 use Notification\Service\NotificationService;
 
-class SendHandlerFactory implements FactoryInterface
+class CountHandlerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param string             $requestedName
      * @param null|array         $options
      *
-     * @return SendHandler
+     * @return CountHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SendHandler
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CountHandler
     {
-        return new SendHandler(
+        return new CountHandler(
             $container->get(ResponseFactoryInterface::class),
             $container->get(StreamFactoryInterface::class),
             $container->get(NotificationService::class)

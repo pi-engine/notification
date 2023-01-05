@@ -4,5 +4,5 @@ namespace Notification\Sender\SMS;
 
 interface SMSInterface
 {
-    public function send($params): int;
+    public function send($config, $params): void;
 }

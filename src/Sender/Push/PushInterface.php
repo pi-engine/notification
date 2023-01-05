@@ -4,5 +4,5 @@ namespace Notification\Sender\Push;
 
 interface PushInterface
 {
-    public function send($params): int;
+    public function send($config, $params): void;
 }

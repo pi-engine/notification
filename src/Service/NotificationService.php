@@ -4,25 +4,42 @@ namespace Notification\Service;
 
 use IntlDateFormatter;
 use Notification\Repository\NotificationRepositoryInterface;
-use Notification\Service\SendService;
+use Notification\Sender\Mail\MailInterface;
+use Notification\Sender\Push\PushInterface;
+use Notification\Sender\SMS\SMSInterface;
 
 class NotificationService implements ServiceInterface
 {
     /* @var NotificationRepositoryInterface */
     protected NotificationRepositoryInterface $notificationRepository;
 
-    /* @var SendService */
-    protected SendService $sendService;
+    /* @var MailInterface */
+    protected MailInterface $mailInterface;
+
+    /* @var SMSInterface */
+    protected SMSInterface $smsInterface;
+
+    /* @var PushInterface */
+    protected PushInterface $pushInterface;
+
+    /* @var array */
+    protected array $config;
 
     /**
      * @param NotificationRepositoryInterface $notificationRepository
      */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
-        SendService $sendService
+        MailInterface $mailInterface,
+        SMSInterface $smsInterface,
+        PushInterface $pushInterface,
+        $config
     ) {
         $this->notificationRepository = $notificationRepository;
-        $this->sendService            = $sendService;
+        $this->mailInterface          = $mailInterface;
+        $this->smsInterface           = $smsInterface;
+        $this->pushInterface          = $pushInterface;
+        $this->config                 = $config;
     }
 
     /**
@@ -92,7 +109,7 @@ class NotificationService implements ServiceInterface
      *
      * @return int
      */
-    public function getViewedCount($params): int
+    public function getNotViewedCount($params): array
     {
         // Set params
         $listParams = [
@@ -101,7 +118,13 @@ class NotificationService implements ServiceInterface
             'status'  => 1,
         ];
 
-        return $this->notificationRepository->getNotificationCount($listParams);
+        return [
+            'result' => true,
+            'data'   => [
+                'count' => $this->notificationRepository->getNotificationCount($listParams),
+            ],
+            'error'  => [],
+        ];
     }
 
     /**
@@ -154,22 +177,11 @@ class NotificationService implements ServiceInterface
             ];
         }
 
-        // date formater
-        // todo: improve it
-        $formatter = new IntlDateFormatter(
-            'fa_IR@calendar=persian',
-            IntlDateFormatter::SHORT, //date format
-            IntlDateFormatter::NONE, //time format
-            'Asia/Tehran',
-            IntlDateFormatter::TRADITIONAL,
-            'yyyy/MM/dd HH:mm:ss'
-        );
-
-        $notification['time_create_view'] = $formatter->format($notification['time_create']);
-        $notification['time_update_view'] = $formatter->format($notification['time_update']);
-
         // Set information
-        return !empty($notification['information']) ? json_decode($notification['information'], true) : [];
+        $information = (!empty($notification['information'])) ? json_decode($notification['information'], true) : [];
+        unset($notification['information']);
+
+        return array_merge($notification, $information);
     }
 
     /**
@@ -177,21 +189,35 @@ class NotificationService implements ServiceInterface
      */
     public function send($params): void
     {
-        $addParams = [];
-
+        // Send notification as mail
         if (isset($params['mail']) && !empty($params['mail'])) {
-            $this->sendService->sendMail($params['mail']);
+            $this->mailInterface->send($this->config['mail'], $params['mail']);
         }
 
+        // Send notification as SMS
         if (isset($params['sms']) && !empty($params['sms'])) {
-            $this->sendService->sendSms($params['sms']);
+            $this->smsInterface->send($this->config['sms'], $params['sms']);
         }
 
+        // Send notification and push
         if (isset($params['push']) && !empty($params['push'])) {
-            $this->sendService->sendPush($params['push']);
+            $this->pushInterface->send($this->config['push'], $params['push']);
         }
 
-        if (isset($params['db']) && (int)$params['db'] === 1) {
+        // Save to DB
+        if (isset($params['information']) && !empty($params['information'])) {
+            // Set params
+            $addParams = [
+                'user_id'     => $params['user_id'],
+                'status'      => 1,
+                'viewed'      => 0,
+                'sent'        => 1,
+                'time_create' => time(),
+                'time_update' => time(),
+                'information' => $params['information'],
+            ];
+
+            // Add notification to DB
             $this->notificationRepository->addNotification($addParams);
         }
     }
