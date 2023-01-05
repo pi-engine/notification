@@ -4,6 +4,7 @@ namespace Notification\Sender\Mail;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
+use function var_dump;
 
 class Mailer implements MailInterface
 {
@@ -37,11 +38,16 @@ class Mailer implements MailInterface
         $mail->SMTPSecure = $SMTPSecure;
         $mail->Port       = $config['smtp']['port'];
 
+        // Mail setting
         $mail->setFrom($config['from']['email'], $config['from']['name']);
         $mail->addAddress($params['to']['email'], $params['to']['name']);
         $mail->isHTML(true);
         $mail->Subject = $params['subject'];
         $mail->Body    = $params['body'];
+        $mail->CharSet = 'UTF-8';
         $mail->send();
+
+        var_dump($mail);
+        die;
     }
 }

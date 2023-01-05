@@ -11,7 +11,7 @@ return [
     'service_manager' => [
         'aliases'   => [
             Repository\NotificationRepositoryInterface::class => Repository\NotificationRepository::class,
-            Sender\Mail\MailInterface::class                  => Sender\Mail\LaminasMail::class,
+            Sender\Mail\MailInterface::class                  => Sender\Mail\Mailer::class,
             Sender\SMS\SMSInterface::class                    => Sender\SMS\PayamakYab::class,
             Sender\Push\PushInterface::class                  => Sender\Push\Fcm::class,
         ],

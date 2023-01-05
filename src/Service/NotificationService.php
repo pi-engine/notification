@@ -7,6 +7,7 @@ use Notification\Repository\NotificationRepositoryInterface;
 use Notification\Sender\Mail\MailInterface;
 use Notification\Sender\Push\PushInterface;
 use Notification\Sender\SMS\SMSInterface;
+use function var_dump;
 
 class NotificationService implements ServiceInterface
 {
@@ -190,8 +191,8 @@ class NotificationService implements ServiceInterface
     public function send($params): void
     {
         // Send notification as mail
-        if (isset($params['mail']) && !empty($params['mail'])) {
-            $this->mailInterface->send($this->config['mail'], $params['mail']);
+        if (isset($params['email']) && !empty($params['email'])) {
+            $this->mailInterface->send($this->config['email'], $params['email']);
         }
 
         // Send notification as SMS
