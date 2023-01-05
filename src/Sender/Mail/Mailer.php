@@ -46,8 +46,5 @@ class Mailer implements MailInterface
         $mail->Body    = $params['body'];
         $mail->CharSet = 'UTF-8';
         $mail->send();
-
-        var_dump($mail);
-        die;
     }
 }
