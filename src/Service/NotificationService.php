@@ -174,12 +174,25 @@ class NotificationService implements ServiceInterface
 
     /**
      * @param $params
-     *
-     * @return array
      */
-    public function send($params): array
+    public function send($params): void
     {
+        $addParams = [];
 
-        return [];
+        if (isset($params['mail']) && !empty($params['mail'])) {
+            $this->sendService->sendMail($params['mail']);
+        }
+
+        if (isset($params['sms']) && !empty($params['sms'])) {
+            $this->sendService->sendSms($params['sms']);
+        }
+
+        if (isset($params['push']) && !empty($params['push'])) {
+            $this->sendService->sendPush($params['push']);
+        }
+
+        if (isset($params['db']) && (int)$params['db'] === 1) {
+            $this->notificationRepository->addNotification($addParams);
+        }
     }
 }

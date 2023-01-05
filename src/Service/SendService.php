@@ -2,57 +2,31 @@
 
 namespace Notification\Service;
 
-use Notification\Sender\Mail\Mail;
-use Notification\Sender\SMS\SMS;
-use Notification\Sender\Push\Push;
+use Laminas\Mail;
+use Laminas\Soap\Client as LaminasSoapClient;
+use PHPMailer\PHPMailer\PHPMailer;
+use function str_replace;
 
 class SendService implements ServiceInterface
 {
+    protected string $mailSender = 'phpMailer';
 
-    /* @var Mail */
-    protected Mail $mail;
-
-    /* @var Push */
-    protected Push $push;
-
-    /* @var SMS */
-    protected SMS $sms;
-
-    public function __construct(
-        Mail $mail,
-        push $push,
-        SMS  $sms
-    )
+    public function __construct()
     {
-        $this->mail = $mail;
-        $this->push = $push;
-        $this->sms = $sms;
     }
 
-    /**
-     * @param $params
-     * @param $type type of send method
-     *
-     * @return array
-     */
-    public function sendNotification($params, $type)
+    public function sendMail($params)
     {
-        $result = array();
-        $result["platform"] = $type;
-        switch ($type) {
-            case "mail":
-                /// TODO : set target   (device , mailBox , browser , ...)
-//                $result["target"] = "mailbox";
-                $result["status"] = $this->mail->send($params);
-                break;
-            default:
-                /// TODO : add unknown platform for denied type
-                $result["platform"] = 0;
-                $result["status"] = 0;
-                break;
-        }
-        return $result;
+
     }
 
+    public function sendSms($params)
+    {
 
+    }
+
+    public function sendPush($params)
+    {
+
+    }
 }
