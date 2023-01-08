@@ -13,9 +13,8 @@ class Mailer implements MailInterface
      */
     public function send($config, $params): void
     {
-
         $SMTPSecure = '';
-        switch ($config['smtp']['SMTPSecure']) {
+        switch ($config['phpmailer']['smtp']['SMTPSecure']) {
             case 'ENCRYPTION_STARTTLS':
                 $SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 break;
@@ -25,26 +24,25 @@ class Mailer implements MailInterface
                 break;
         }
 
-
         //Create an instance; passing `true` enables exceptions
         $mail = new PhpMailer(true);
 
         //Server settings
         $mail->isSMTP();
-        $mail->Host       = $config['smtp']['host'];
+        $mail->Host       = $config['phpmailer']['smtp']['host'];
         $mail->SMTPAuth   = true;
-        $mail->Username   = $config['smtp']['username'];
-        $mail->Password   = $config['smtp']['password'];
+        $mail->Username   = $config['phpmailer']['smtp']['username'];
+        $mail->Password   = $config['phpmailer']['smtp']['password'];
         $mail->SMTPSecure = $SMTPSecure;
-        $mail->Port       = $config['smtp']['port'];
+        $mail->Port       = $config['phpmailer']['smtp']['port'];
 
         // Mail setting
-        $mail->setFrom($config['from']['email'], $config['from']['name']);
+        $mail->setFrom($config['phpmailer']['from']['email'], $config['phpmailer']['from']['name']);
         $mail->addAddress($params['to']['email'], $params['to']['name']);
         $mail->isHTML(true);
         $mail->Subject = $params['subject'];
         $mail->Body    = $params['body'];
-        $mail->CharSet = 'UTF-8';
+        $mail->CharSet = $config['phpmailer']['encoding'];
         $mail->send();
     }
 }
