@@ -30,7 +30,7 @@ class NotificationRepositoryFactory implements FactoryInterface
         return new NotificationRepository(
             $container->get(AdapterInterface::class),
             new ReflectionHydrator(),
-            new Storage(0, 0, 0, 0, 0, 0, 0),
+            new Storage(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
         );
     }
 }
