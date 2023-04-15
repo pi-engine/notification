@@ -7,6 +7,7 @@ use Notification\Repository\NotificationRepositoryInterface;
 use Notification\Sender\Mail\MailInterface;
 use Notification\Sender\Push\PushInterface;
 use Notification\Sender\SMS\SMSInterface;
+use User\Service\AccountService;
 use function var_dump;
 
 class NotificationService implements ServiceInterface
@@ -158,7 +159,9 @@ class NotificationService implements ServiceInterface
         if (is_object($notification)) {
             $notification = [
                 'id' => $notification->getId(),
-                'user_id' => $notification->getUserId(),
+                'sender_id' => $notification->getSenderId(),
+                'receiver_id' => $notification->getReceiverId(),
+                'type' => $notification->getType(),
                 'status' => $notification->getStatus(),
                 'viewed' => $notification->getViewed(),
                 'sent' => $notification->getSent(),
@@ -169,7 +172,9 @@ class NotificationService implements ServiceInterface
         } else {
             $notification = [
                 'id' => $notification['id'],
-                'user_id' => $notification['user_id'],
+                'sender_id' => 3,
+                'receiver_id' => $notification['receiver_id'],
+                'type' => $notification['type'],
                 'status' => $notification['status'],
                 'viewed' => $notification['viewed'],
                 'sent' => $notification['sent'],
@@ -189,7 +194,7 @@ class NotificationService implements ServiceInterface
     /**
      * @param $params
      */
-    public function send($params,$side='customer'): void
+    public function send($params, $side = 'customer'): void
     {
         // Send notification as mail
         if (isset($params['email']) && !empty($params['email'])) {
@@ -225,5 +230,32 @@ class NotificationService implements ServiceInterface
             // Add notification to DB
             $this->notificationRepository->addNotification($addParams);
         }
+    }
+
+    /**
+     * @param $params
+     */
+    public function middleSend($params): void
+    {
+        $notificationParams = [
+            'information' =>
+                [
+                    "device_token" => '/topics/global',
+                    "in_app" => false,
+                    "in_app_title" => 'title',
+                    "title" => 'Score',
+                    "in_app_body" => 'You have earned   points. Your score was from the    package.',
+                    "body" => 'You have earned  points. Your score was from the   package.',
+                    "event" => 'global',
+                    "user_id" => (int)$params['user_id'],
+                    "item_id" => 0,
+                    "sender_id" => $params['user_id'],
+                    "type" => 'global',
+                    "image_url" => '',
+                    "receiver_id" => 0
+                ],
+        ];
+        $notificationParams['push'] = $notificationParams['information'];
+        $this->send($notificationParams, 'customer');
     }
 }

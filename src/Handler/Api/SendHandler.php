@@ -23,11 +23,12 @@ class SendHandler implements RequestHandlerInterface
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory,
-        NotificationService $notificationService
-    ) {
-        $this->responseFactory     = $responseFactory;
-        $this->streamFactory       = $streamFactory;
+        StreamFactoryInterface   $streamFactory,
+        NotificationService      $notificationService
+    )
+    {
+        $this->responseFactory = $responseFactory;
+        $this->streamFactory = $streamFactory;
         $this->notificationService = $notificationService;
     }
 
@@ -38,13 +39,14 @@ class SendHandler implements RequestHandlerInterface
 
         // Get request body
         $requestBody = $request->getParsedBody();
+        $requestBody['user_id'] = $account['id'];
 
         // Set params
         $params = [
             'mail' => [
 
             ],
-            'sms'  => [
+            'sms' => [
 
             ],
             'push' => [
@@ -53,7 +55,7 @@ class SendHandler implements RequestHandlerInterface
         ];
 
         // Send notification
-        $result = $this->notificationService->send($params);
+        $result = $this->notificationService->middleSend($requestBody);
 
         return new JsonResponse($result);
     }
