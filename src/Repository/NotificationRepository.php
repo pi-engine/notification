@@ -175,7 +175,7 @@ class NotificationRepository implements NotificationRepositoryInterface
             );
         }
 
-        $resultSet = new HydratingResultSet($this->hydrator, $this->itemPrototype);
+        $resultSet = new HydratingResultSet($this->hydrator, $this->storagePrototype);
         $resultSet->initialize($result);
         $item = $resultSet->current();
 
