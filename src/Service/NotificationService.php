@@ -227,7 +227,9 @@ class NotificationService implements ServiceInterface
                 'time_update' => time(),
                 'information' => json_encode($params['information']),
             ];
-
+            if(isset($params['information']['viewed'])){
+                $addParams['viewed'] = $params['information']['viewed'];
+            }
             // Add notification to DB
             $this->notificationRepository->addNotification($addParams);
         }
@@ -250,6 +252,7 @@ class NotificationService implements ServiceInterface
                     "event" => 'global',
                     "user_id" => (int)$params['user_id'],
                     "item_id" => 0,
+                    "viewed" => 1,
                     "sender_id" => $params['user_id'],
                     "type" => 'global',
                     "image_url" => '',
