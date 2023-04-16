@@ -9,48 +9,49 @@ use User\Middleware\SecurityMiddleware;
 
 return [
     'service_manager' => [
-        'aliases'   => [
+        'aliases' => [
             Repository\NotificationRepositoryInterface::class => Repository\NotificationRepository::class,
-            Sender\Mail\MailInterface::class                  => Sender\Mail\Mailer::class,
-            Sender\SMS\SMSInterface::class                    => Sender\SMS\PayamakYab::class,
-            Sender\Push\PushInterface::class                  => Sender\Push\Fcm::class,
+            Sender\Mail\MailInterface::class => Sender\Mail\Mailer::class,
+            Sender\SMS\SMSInterface::class => Sender\SMS\PayamakYab::class,
+            Sender\Push\PushInterface::class => Sender\Push\Fcm::class,
         ],
         'factories' => [
             Repository\NotificationRepository::class => Factory\Repository\NotificationRepositoryFactory::class,
-            Service\NotificationService::class       => Factory\Service\NotificationServiceFactory::class,
-            Handler\Api\ListHandler::class           => Factory\Handler\Api\ListHandlerFactory::class,
-            Handler\Api\SendHandler::class           => Factory\Handler\Api\SendHandlerFactory::class,
-            Handler\Api\CountHandler::class          => Factory\Handler\Api\CountHandlerFactory::class,
-            Sender\Mail\LaminasMail::class           => Factory\Sender\Mail\LaminasMailFactory::class,
-            Sender\Mail\Mailer::class                => Factory\Sender\Mail\MailerFactory::class,
-            Sender\SMS\Nexmo::class                  => Factory\Sender\SMS\NexmoFactory::class,
-            Sender\SMS\PayamakYab::class             => Factory\Sender\SMS\PayamakYabFactory::class,
-            Sender\Push\Fcm::class                   => Factory\Sender\Push\FcmFactory::class,
+            Service\NotificationService::class => Factory\Service\NotificationServiceFactory::class,
+            Handler\Api\ListHandler::class => Factory\Handler\Api\ListHandlerFactory::class,
+            Handler\Api\SendHandler::class => Factory\Handler\Api\SendHandlerFactory::class,
+            Handler\Api\UpdateHandler::class => Factory\Handler\Api\UpdateHandlerFactory::class,
+            Handler\Api\CountHandler::class => Factory\Handler\Api\CountHandlerFactory::class,
+            Sender\Mail\LaminasMail::class => Factory\Sender\Mail\LaminasMailFactory::class,
+            Sender\Mail\Mailer::class => Factory\Sender\Mail\MailerFactory::class,
+            Sender\SMS\Nexmo::class => Factory\Sender\SMS\NexmoFactory::class,
+            Sender\SMS\PayamakYab::class => Factory\Sender\SMS\PayamakYabFactory::class,
+            Sender\Push\Fcm::class => Factory\Sender\Push\FcmFactory::class,
 
         ],
     ],
-    'router'          => [
+    'router' => [
         'routes' => [
             // Api section
-            'api_notification'   => [
-                'type'         => Literal::class,
-                'options'      => [
-                    'route'    => '/notification',
+            'api_notification' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/notification',
                     'defaults' => [],
                 ],
                 'child_routes' => [
                     'count' => [
-                        'type'    => Literal::class,
+                        'type' => Literal::class,
                         'options' => [
-                            'route'    => '/count',
+                            'route' => '/count',
                             'defaults' => [
-                                'module'      => 'notification',
-                                'section'     => 'api',
-                                'package'     => 'count',
-                                'handler'     => 'count',
+                                'module' => 'notification',
+                                'section' => 'api',
+                                'package' => 'count',
+                                'handler' => 'count',
                                 'permissions' => 'notification-count',
-                                'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'controller' => PipeSpec::class,
+                                'middleware' => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     Handler\Api\CountHandler::class
@@ -59,17 +60,17 @@ return [
                         ],
                     ],
                     'list' => [
-                        'type'    => Literal::class,
+                        'type' => Literal::class,
                         'options' => [
-                            'route'    => '/list',
+                            'route' => '/list',
                             'defaults' => [
-                                'module'      => 'notification',
-                                'section'     => 'api',
-                                'package'     => 'list',
-                                'handler'     => 'list',
+                                'module' => 'notification',
+                                'section' => 'api',
+                                'package' => 'list',
+                                'handler' => 'list',
                                 'permissions' => 'notification-list',
-                                'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'controller' => PipeSpec::class,
+                                'middleware' => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     Handler\Api\ListHandler::class
@@ -78,20 +79,39 @@ return [
                         ],
                     ],
                     'send' => [
-                        'type'    => Literal::class,
+                        'type' => Literal::class,
                         'options' => [
-                            'route'    => '/send',
+                            'route' => '/send',
                             'defaults' => [
-                                'module'      => 'notification',
-                                'section'     => 'api',
-                                'package'     => 'send',
-                                'handler'     => 'send',
+                                'module' => 'notification',
+                                'section' => 'api',
+                                'package' => 'send',
+                                'handler' => 'send',
                                 'permissions' => 'notification-send',
-                                'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'controller' => PipeSpec::class,
+                                'middleware' => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     Handler\Api\SendHandler::class
+                                ),
+                            ],
+                        ],
+                    ],
+                    'update' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/update',
+                            'defaults' => [
+                                'module' => 'notification',
+                                'section' => 'api',
+                                'package' => 'send',
+                                'handler' => 'send',
+                                'permissions' => 'notification-send',
+                                'controller' => PipeSpec::class,
+                                'middleware' => new PipeSpec(
+                                    SecurityMiddleware::class,
+                                    AuthenticationMiddleware::class,
+                                    Handler\Api\UpdateHandler::class
                                 ),
                             ],
                         ],
@@ -100,22 +120,22 @@ return [
             ],
             // Admin section
             'admin_notification' => [
-                'type'         => Literal::class,
-                'options'      => [
-                    'route'    => '/admin/notification',
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/admin/notification',
                     'defaults' => [],
                 ],
                 'child_routes' => [
                     // Admin installer
                     'installer' => [
-                        'type'    => Literal::class,
+                        'type' => Literal::class,
                         'options' => [
-                            'route'    => '/installer',
+                            'route' => '/installer',
                             'defaults' => [
-                                'module'     => 'notification',
-                                'section'    => 'admin',
-                                'package'    => 'installer',
-                                'handler'    => 'installer',
+                                'module' => 'notification',
+                                'section' => 'admin',
+                                'package' => 'installer',
+                                'handler' => 'installer',
                                 'controller' => PipeSpec::class,
                                 'middleware' => new PipeSpec(
                                     SecurityMiddleware::class,

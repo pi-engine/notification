@@ -237,7 +237,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         $update = new Update($this->tableNotification);
         $update->set($params);
-        $update->where(['id' => $params['id']]);
+        $update->where(['id' => $params['id'], 'receiver_id' => $params['receiver_id']]);
 
         $sql = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($update);
@@ -248,7 +248,7 @@ class NotificationRepository implements NotificationRepositoryInterface
                 'Database error occurred during update operation'
             );
         }
-        return $this->getItem($params['id']);
+        return $this->getNotification($params['id']);
     }
 
     /**

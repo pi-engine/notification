@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class SendHandler implements RequestHandlerInterface
+class UpdateHandler implements RequestHandlerInterface
 {
     /** @var ResponseFactoryInterface */
     protected ResponseFactoryInterface $responseFactory;
@@ -39,15 +39,14 @@ class SendHandler implements RequestHandlerInterface
 
         // Get request body
         $requestBody = $request->getParsedBody();
-        $requestBody['user_id'] = $account['id'];
 
         $params = [
-            'user_id' => $account['id'],
-            'title' => $requestBody['title'],
-            'message' => $requestBody['message'],
+            "receiver_id" => $account['id'],
+            "id" => $requestBody["id"],
+            "viewed" => 1
         ];
 
-        // Set params
+//        // Set params
 //        $params = [
 //            'mail' => [
 //
@@ -60,8 +59,8 @@ class SendHandler implements RequestHandlerInterface
 //            ],
 //        ];
 
-        // Send notification
-        $result = $this->notificationService->middleSend($params);
+        // Update notification
+        $result = $this->notificationService->middleUpdate($params);
 
         return new JsonResponse($result);
     }

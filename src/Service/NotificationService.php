@@ -166,7 +166,7 @@ class NotificationService implements ServiceInterface
                 'status' => $notification->getStatus(),
                 'viewed' => $notification->getViewed(),
                 'sent' => $notification->getSent(),
-                'time_create' => $notification->getTimeCreate(),
+                'time_create' =>date('Y M d H:i:s', $notification->getTimeCreate()) ,
                 'time_update' => $notification->getTimeUpdate(),
                 'information' => $notification->getInformation(),
             ];
@@ -179,7 +179,7 @@ class NotificationService implements ServiceInterface
                 'status' => $notification['status'],
                 'viewed' => $notification['viewed'],
                 'sent' => $notification['sent'],
-                'time_create' => $notification['time_create'],
+                'time_create' => date('m/d/Y H:i:s', $notification['time_create']) ,
                 'time_update' => $notification['time_update'],
                 'information' => $notification['information'],
             ];
@@ -243,10 +243,10 @@ class NotificationService implements ServiceInterface
                 [
                     "device_token" => '/topics/global',
                     "in_app" => false,
-                    "in_app_title" => 'title',
-                    "title" => 'Score',
-                    "in_app_body" => 'You have earned   points. Your score was from the    package.',
-                    "body" => 'You have earned  points. Your score was from the   package.',
+                    "in_app_title" => $params['title'],
+                    "title" => $params['title'],
+                    "in_app_body" => $params['message'],
+                    "body" => $params['message'],
                     "event" => 'global',
                     "user_id" => (int)$params['user_id'],
                     "item_id" => 0,
@@ -258,5 +258,12 @@ class NotificationService implements ServiceInterface
         ];
         $notificationParams['push'] = $notificationParams['information'];
         $this->send($notificationParams, 'customer');
+    }
+    /**
+     * @param $params
+     */
+    public function middleUpdate($params): void
+    {
+        $this->notificationRepository->updateNotification($params);
     }
 }
