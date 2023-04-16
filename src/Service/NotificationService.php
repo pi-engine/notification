@@ -125,6 +125,7 @@ class NotificationService implements ServiceInterface
             'result' => true,
             'data' => [
                 'count' => $this->notificationRepository->getNotificationCount($listParams),
+                'unread' => $this->notificationRepository->getUnreadNotificationCount($listParams),
             ],
             'error' => [],
         ];

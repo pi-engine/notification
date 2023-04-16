@@ -133,6 +133,46 @@ class NotificationRepository implements NotificationRepositoryInterface
     /**
      * @param array $params
      *
+     * @return int
+     */
+    public function getUnreadNotificationCount(array $params = []): int
+    {
+        // Set where
+        $columns = ['count' => new Expression('count(*)')];
+
+//        if (isset($params['user_id']) && !empty($params['user_id'])) {
+//            $where['user_id'] = $params['user_id'];
+//        }
+        $where = [];
+        if (isset($params['user_id']) && !empty($params['user_id'])) {
+            $where = ['receiver_id IN (' . $params['user_id'] . ')  '];
+        }
+
+        $where["viewed"] = 0;
+        if (isset($params['status']) && !empty($params['status'])) {
+            $where['status'] = $params['status'];
+        }
+        if (isset($params['viewed']) && !empty($params['viewed'])) {
+            $where['viewed'] = $params['viewed'];
+        }
+        if (isset($params['sent']) && !empty($params['sent'])) {
+            $where['sent'] = $params['sent'];
+        }
+        if (isset($params['id']) && !empty($params['id'])) {
+            $where['id'] = $params['id'];
+        }
+
+        $sql = new Sql($this->db);
+        $select = $sql->select($this->tableNotification)->columns($columns)->where($where);
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $row = $statement->execute()->current();
+
+        return (int)$row['count'];
+    }
+
+    /**
+     * @param array $params
+     *
      * @return array|object
      */
     public function addNotification(array $params): object|array
