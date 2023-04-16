@@ -62,9 +62,10 @@ class NotificationRepository implements NotificationRepositoryInterface
     public function getNotificationList(array $params = []): HydratingResultSet|array
     {
         $where = [];
-        if (isset($params['user_id']) && !empty($params['user_id'])) {
-            $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') '];
-        }
+        // if (isset($params['user_id']) && !empty($params['user_id'])) {
+        // $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') '];
+        // }
+        $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
         if (isset($params['status']) && !empty($params['status'])) {
             $where['status'] = $params['status'];
         }
@@ -108,7 +109,7 @@ class NotificationRepository implements NotificationRepositoryInterface
 //        if (isset($params['user_id']) && !empty($params['user_id'])) {
 //            $where['user_id'] = $params['user_id'];
 //        }
-        $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') '];
+        $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
         if (isset($params['status']) && !empty($params['status'])) {
             $where['status'] = $params['status'];
         }
