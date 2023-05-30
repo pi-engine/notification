@@ -17,6 +17,7 @@ class Fcm implements PushInterface
         $in_app_title = $params['in_app_title'];
         $body = $params["body"];
         $in_app_body = $params["body"];
+        $type = $params["type"];
         $in_app = $params["in_app"];
         $image_url = $params["image_url"];
         $event = $params["event"];
@@ -27,7 +28,7 @@ class Fcm implements PushInterface
         $apns = array('payload' => $payload, 'fcm_options' => $fcm_options);
 
         $notification = array('title' => $title, "content_available" => true, "mutable_content" => true, 'body' => $body, 'image' => $image_url, 'sound' => 'default', 'badge' => '1');
-        $notData = array('click_action' => 'FLUTTER_NOTIFICATION_CLICK', 'type' => 'notification', 'in_app_body' => $in_app_body, 'in_app' => $in_app, 'in_app_title' => $in_app_title, 'event' => $event, "image_url" => $image_url);
+        $notData = array('click_action' => 'FLUTTER_NOTIFICATION_CLICK', 'type' => $type, 'in_app_body' => $in_app_body, 'in_app' => $in_app, 'in_app_title' => $in_app_title, 'event' => $event, "image_url" => $image_url);
         $arrayToSend = array('to' => $token, 'data' => $notData, 'notification' => $notification, 'apns' => $apns, 'priority' => 'high');
         $json = json_encode($arrayToSend);
         $headers = array();
