@@ -23,8 +23,6 @@ class KaveNegar implements SMSInterface
             'status' => 1,
         ];
 
-
-        echo str_replace('+98', '0', $params['mobile']);exit;
         // Send SMS
         $client = new LaminasSoapClient($config['url']);
         $client->SendSimpleByLoginInfo($smsParams)->status;
