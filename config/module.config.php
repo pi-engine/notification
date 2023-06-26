@@ -13,6 +13,7 @@ return [
             Repository\NotificationRepositoryInterface::class => Repository\NotificationRepository::class,
             Sender\Mail\MailInterface::class => Sender\Mail\Mailer::class,
             Sender\SMS\SMSInterface::class => Sender\SMS\PayamakYab::class,
+//            Sender\SMS\SMSInterface::class => Sender\SMS\KaveNegar::class,
             Sender\Push\PushInterface::class => Sender\Push\Fcm::class,
         ],
         'factories' => [
@@ -26,6 +27,7 @@ return [
             Sender\Mail\Mailer::class => Factory\Sender\Mail\MailerFactory::class,
             Sender\SMS\Nexmo::class => Factory\Sender\SMS\NexmoFactory::class,
             Sender\SMS\PayamakYab::class => Factory\Sender\SMS\PayamakYabFactory::class,
+            Sender\SMS\KaveNegar::class => Factory\Sender\SMS\KaveNegarFactory::class,
             Sender\Push\Fcm::class => Factory\Sender\Push\FcmFactory::class,
 
         ],
