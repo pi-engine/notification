@@ -166,7 +166,7 @@ class NotificationService implements ServiceInterface
                 'status' => $notification->getStatus(),
                 'viewed' => $notification->getViewed(),
                 'sent' => $notification->getSent(),
-                'time_create' =>date('Y M d H:i:s', $notification->getTimeCreate()) ,
+                'time_create' => date('Y M d H:i:s', $notification->getTimeCreate()),
                 'time_update' => $notification->getTimeUpdate(),
                 'information' => $notification->getInformation(),
             ];
@@ -179,7 +179,7 @@ class NotificationService implements ServiceInterface
                 'status' => $notification['status'],
                 'viewed' => $notification['viewed'],
                 'sent' => $notification['sent'],
-                'time_create' => date('m/d/Y H:i:s', $notification['time_create']) ,
+                'time_create' => date('m/d/Y H:i:s', $notification['time_create']),
                 'time_update' => $notification['time_update'],
                 'information' => $notification['information'],
             ];
@@ -227,7 +227,7 @@ class NotificationService implements ServiceInterface
                 'time_update' => time(),
                 'information' => json_encode($params['information']),
             ];
-            if(isset($params['information']['viewed'])){
+            if (isset($params['information']['viewed'])) {
                 $addParams['viewed'] = $params['information']['viewed'];
             }
             // Add notification to DB
@@ -238,7 +238,7 @@ class NotificationService implements ServiceInterface
     /**
      * @param $params
      */
-    public function middleSend($params): void
+    public function middleSend($params): array
     {
         $notificationParams = [
             'information' =>
@@ -261,7 +261,11 @@ class NotificationService implements ServiceInterface
         ];
         $notificationParams['push'] = $notificationParams['information'];
         $this->send($notificationParams, 'customer');
+        return [
+            "result" => true,
+        ];
     }
+
     /**
      * @param $params
      */
