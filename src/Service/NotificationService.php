@@ -159,7 +159,7 @@ class NotificationService implements ServiceInterface
 
         if (is_object($notification)) {
             $notification = [
-                'id' => $notification->getId(),
+                'id' => (int)$notification->getId(),
                 'sender_id' => $notification->getSenderId(),
                 'receiver_id' => $notification->getReceiverId(),
                 'type' => $notification->getType(),
@@ -172,7 +172,7 @@ class NotificationService implements ServiceInterface
             ];
         } else {
             $notification = [
-                'id' => $notification['id'],
+                'id' => (int)$notification['id'],
                 'sender_id' => 3,
                 'receiver_id' => $notification['receiver_id'],
                 'type' => $notification['type'],
