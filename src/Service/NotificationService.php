@@ -225,7 +225,7 @@ class NotificationService implements ServiceInterface
                 'sent' => 1,
                 'time_create' => time(),
                 'time_update' => time(),
-                'information' => json_encode($params['information']),
+                'information' => json_encode($params['information'], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT),
             ];
             if (isset($params['information']['viewed'])) {
                 $addParams['viewed'] = $params['information']['viewed'];
