@@ -41,8 +41,8 @@ class InstallerHandler implements RequestHandlerInterface
         return new JsonResponse(
             [
                 'result' => true,
-                'data'   => [],
-                'error'  => [],
+                'data'   => new \stdClass(),
+                'error'  => new \stdClass(),
             ],
         );
     }

@@ -91,7 +91,7 @@ class NotificationService implements ServiceInterface
                     'page' => $page,
                 ],
             ],
-            'error' => [],
+            'error' => new \stdClass(),
         ];
     }
 
@@ -127,7 +127,7 @@ class NotificationService implements ServiceInterface
                 'count' => $this->notificationRepository->getNotificationCount($listParams),
                 'unread' => $this->notificationRepository->getUnreadNotificationCount($listParams),
             ],
-            'error' => [],
+            'error' => new \stdClass(),
         ];
     }
 
