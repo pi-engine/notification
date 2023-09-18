@@ -2,6 +2,7 @@
 
 namespace Notification\Handler\Api;
 
+use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Notification\Service\NotificationService;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -63,6 +64,6 @@ class SendHandler implements RequestHandlerInterface
         // Send notification
         $result = $this->notificationService->middleSend($params);
 
-        return new JsonResponse($result);
+        return new JsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
     }
 }

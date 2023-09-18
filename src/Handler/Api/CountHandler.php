@@ -2,6 +2,7 @@
 
 namespace Notification\Handler\Api;
 
+use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -45,6 +46,6 @@ class CountHandler implements RequestHandlerInterface
         // Get list of notifications
         $result = $this->notificationService->getNotViewedCount($params);
 
-        return new JsonResponse($result);
+        return new JsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
     }
 }
