@@ -43,6 +43,7 @@ class Mailer implements MailInterface
         $mail->Subject = $params['subject'];
         $mail->Body    = $params['body'];
         $mail->CharSet = $config['phpmailer']['encoding'];
+        //$mail->SMTPDebug = 1;
         $mail->send();
     }
 }
