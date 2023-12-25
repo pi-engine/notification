@@ -1,0 +1,37 @@
+<?php
+
+return [
+    'notification' => [
+        'email' => [
+            'laminas'   => [
+                'encoding' => 'utf-8',
+                'from'     => [
+                    'email' => 'XXX',
+                    'name'  => 'Laminas',
+                ],
+            ],
+            'phpmailer' => [
+                // use 587 if you have set `SMTPSecure => ENCRYPTION_STARTTLS`
+                // use 465 if you have set `SMTPSecure => ENCRYPTION_SMTPS`
+                'smtp'     => [
+                    'host'          => 'XXX',
+                    'username'      => 'XXX',
+                    'password'      => 'XXX',
+                    'port'          => 465,
+                    'SMTPSecure'    => 'ENCRYPTION_SMTPS',
+                    'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+                    'ssl'           => 'tls',
+                ],
+                'from'     => [
+                    'email' => 'XXX',
+                    'name'  => 'Laminas',
+                ],
+                'encoding' => 'utf-8',
+            ],
+        ],
+        'sms'   => [],
+        'push'  => [
+            'fcm' => [],
+        ],
+    ],
+];
