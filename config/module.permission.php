@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'api'   => [
+    'api' => [
         [
             'module'      => 'notification',
             'section'     => 'api',
