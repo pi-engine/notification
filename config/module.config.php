@@ -5,6 +5,7 @@ namespace Notification;
 use Laminas\Mvc\Middleware\PipeSpec;
 use Laminas\Router\Http\Literal;
 use User\Middleware\AuthenticationMiddleware;
+use User\Middleware\InstallerMiddleware;
 use User\Middleware\SecurityMiddleware;
 
 return [
@@ -28,6 +29,7 @@ return [
             Sender\SMS\PayamakYab::class             => Factory\Sender\SMS\PayamakYabFactory::class,
             Sender\SMS\KaveNegar::class              => Factory\Sender\SMS\KaveNegarFactory::class,
             Sender\Push\Fcm::class                   => Factory\Sender\Push\FcmFactory::class,
+            Handler\InstallerHandler::class          => Factory\Handler\InstallerHandlerFactory::class,
         ],
     ],
     'router'          => [
@@ -45,6 +47,7 @@ return [
                         'options' => [
                             'route'    => '/count',
                             'defaults' => [
+                                'title'       => 'Notification count',
                                 'module'      => 'notification',
                                 'section'     => 'api',
                                 'package'     => 'count',
@@ -64,6 +67,7 @@ return [
                         'options' => [
                             'route'    => '/list',
                             'defaults' => [
+                                'title'       => 'Notification list',
                                 'module'      => 'notification',
                                 'section'     => 'api',
                                 'package'     => 'list',
@@ -83,6 +87,7 @@ return [
                         'options' => [
                             'route'    => '/send',
                             'defaults' => [
+                                'title'       => 'Notification send',
                                 'module'      => 'notification',
                                 'section'     => 'api',
                                 'package'     => 'send',
@@ -102,6 +107,7 @@ return [
                         'options' => [
                             'route'    => '/update',
                             'defaults' => [
+                                'title'       => 'Notification send update',
                                 'module'      => 'notification',
                                 'section'     => 'api',
                                 'package'     => 'send',
@@ -140,6 +146,7 @@ return [
                                 'middleware' => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
+                                    InstallerMiddleware::class,
                                     Handler\InstallerHandler::class
                                 ),
                             ],
@@ -149,8 +156,7 @@ return [
             ],
         ],
     ],
-
-    'view_manager' => [
+    'view_manager'    => [
         'strategies' => [
             'ViewJsonStrategy',
         ],

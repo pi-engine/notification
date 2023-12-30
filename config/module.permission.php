@@ -3,6 +3,7 @@
 return [
     'api' => [
         [
+            'title'       => 'Notification count',
             'module'      => 'notification',
             'section'     => 'api',
             'package'     => 'notification',
@@ -14,6 +15,7 @@ return [
             ],
         ],
         [
+            'title'       => 'Notification list',
             'module'      => 'notification',
             'section'     => 'api',
             'package'     => 'notification',
@@ -25,6 +27,7 @@ return [
             ],
         ],
         [
+            'title'       => 'Notification send',
             'module'      => 'notification',
             'section'     => 'api',
             'package'     => 'notification',

@@ -4,12 +4,12 @@ namespace Notification\Factory\Handler;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Notification\Handler\InstallerHandler;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Notification\Handler\InstallerHandler;
-use Notification\Service\InstallerService;
+use User\Service\InstallerService;
 
 class InstallerHandlerFactory implements FactoryInterface
 {
