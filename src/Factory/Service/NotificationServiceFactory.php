@@ -4,13 +4,13 @@ namespace Notification\Factory\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Notification\Repository\NotificationRepositoryInterface;
 use Notification\Sender\Mail\MailInterface;
 use Notification\Sender\Push\PushInterface;
 use Notification\Sender\SMS\SMSInterface;
+use Notification\Service\NotificationService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Notification\Repository\NotificationRepositoryInterface;
-use Notification\Service\NotificationService;
 
 class NotificationServiceFactory implements FactoryInterface
 {

@@ -24,12 +24,11 @@ class UpdateHandler implements RequestHandlerInterface
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface   $streamFactory,
-        NotificationService      $notificationService
-    )
-    {
-        $this->responseFactory = $responseFactory;
-        $this->streamFactory = $streamFactory;
+        StreamFactoryInterface $streamFactory,
+        NotificationService $notificationService
+    ) {
+        $this->responseFactory     = $responseFactory;
+        $this->streamFactory       = $streamFactory;
         $this->notificationService = $notificationService;
     }
 
@@ -43,8 +42,8 @@ class UpdateHandler implements RequestHandlerInterface
 
         $params = [
             "receiver_id" => $account['id'],
-            "id" => $requestBody["id"],
-            "viewed" => 1
+            "id"          => $requestBody["id"],
+            "viewed"      => 1,
         ];
 
 //        // Set params

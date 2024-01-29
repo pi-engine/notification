@@ -12,11 +12,10 @@ use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Update;
 use Laminas\Hydrator\HydratorInterface;
 use Notification\Model\IdValue\IdValue;
-use Notification\Model\Notification\Notification;
 use Notification\Model\Message\Message;
+use Notification\Model\Notification\Notification;
 use Notification\Model\Storage;
 use RuntimeException;
-use InvalidArgumentException;
 
 
 class NotificationRepository implements NotificationRepositoryInterface
@@ -44,13 +43,12 @@ class NotificationRepository implements NotificationRepositoryInterface
     private HydratorInterface $hydrator;
 
     public function __construct(
-        AdapterInterface  $db,
+        AdapterInterface $db,
         HydratorInterface $hydrator,
-        Storage           $storagePrototype
-    )
-    {
-        $this->db = $db;
-        $this->hydrator = $hydrator;
+        Storage $storagePrototype
+    ) {
+        $this->db               = $db;
+        $this->hydrator         = $hydrator;
         $this->storagePrototype = $storagePrototype;
     }
 
@@ -80,10 +78,10 @@ class NotificationRepository implements NotificationRepositoryInterface
         }
 
 
-        $sql = new Sql($this->db);
-        $select = $sql->select($this->tableNotification)->where($where)->order($params['order'])->offset($params['offset'])->limit($params['limit']);
+        $sql       = new Sql($this->db);
+        $select    = $sql->select($this->tableNotification)->where($where)->order($params['order'])->offset($params['offset'])->limit($params['limit']);
         $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
+        $result    = $statement->execute();
 
         if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
             return [];
@@ -104,7 +102,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         // Set where
         $columns = ['count' => new Expression('count(*)')];
-        $where = [];
+        $where   = [];
 
 //        if (isset($params['user_id']) && !empty($params['user_id'])) {
 //            $where['user_id'] = $params['user_id'];
@@ -123,10 +121,10 @@ class NotificationRepository implements NotificationRepositoryInterface
             $where['id'] = $params['id'];
         }
 
-        $sql = new Sql($this->db);
-        $select = $sql->select($this->tableNotification)->columns($columns)->where($where);
+        $sql       = new Sql($this->db);
+        $select    = $sql->select($this->tableNotification)->columns($columns)->where($where);
         $statement = $sql->prepareStatementForSqlObject($select);
-        $row = $statement->execute()->current();
+        $row       = $statement->execute()->current();
 
         return (int)$row['count'];
     }
@@ -163,10 +161,10 @@ class NotificationRepository implements NotificationRepositoryInterface
             $where['id'] = $params['id'];
         }
 
-        $sql = new Sql($this->db);
-        $select = $sql->select($this->tableNotification)->columns($columns)->where($where);
+        $sql       = new Sql($this->db);
+        $select    = $sql->select($this->tableNotification)->columns($columns)->where($where);
         $statement = $sql->prepareStatementForSqlObject($select);
-        $row = $statement->execute()->current();
+        $row       = $statement->execute()->current();
 
         return (int)$row['count'];
     }
@@ -181,9 +179,9 @@ class NotificationRepository implements NotificationRepositoryInterface
         $insert = new Insert($this->tableNotification);
         $insert->values($params);
 
-        $sql = new Sql($this->db);
+        $sql       = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($insert);
-        $result = $statement->execute();
+        $result    = $statement->execute();
 
         if (!$result instanceof ResultInterface) {
             throw new RuntimeException(
@@ -204,10 +202,10 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         $where = [$type => $parameter];
 
-        $sql = new Sql($this->db);
-        $select = $sql->select($this->tableNotification)->where($where);
+        $sql       = new Sql($this->db);
+        $select    = $sql->select($this->tableNotification)->where($where);
         $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
+        $result    = $statement->execute();
 
         if (!$result instanceof ResultInterface || !$result->isQueryResult()) {
             throw new RuntimeException(
@@ -240,9 +238,9 @@ class NotificationRepository implements NotificationRepositoryInterface
         $update->set($params);
         $update->where(['id' => $params['id'], 'receiver_id' => $params['receiver_id']]);
 
-        $sql = new Sql($this->db);
+        $sql       = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($update);
-        $result = $statement->execute();
+        $result    = $statement->execute();
 
         if (!$result instanceof ResultInterface) {
             throw new RuntimeException(
@@ -263,7 +261,7 @@ class NotificationRepository implements NotificationRepositoryInterface
         $delete->set($params);
         $delete->where(['id' => $params['id']]);
 
-        $sql = new Sql($this->db);
+        $sql       = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($delete);
         $statement->execute();
     }

@@ -24,12 +24,11 @@ class SendHandler implements RequestHandlerInterface
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface   $streamFactory,
-        NotificationService      $notificationService
-    )
-    {
-        $this->responseFactory = $responseFactory;
-        $this->streamFactory = $streamFactory;
+        StreamFactoryInterface $streamFactory,
+        NotificationService $notificationService
+    ) {
+        $this->responseFactory     = $responseFactory;
+        $this->streamFactory       = $streamFactory;
         $this->notificationService = $notificationService;
     }
 
@@ -39,12 +38,12 @@ class SendHandler implements RequestHandlerInterface
         $account = $request->getAttribute('account');
 
         // Get request body
-        $requestBody = $request->getParsedBody();
+        $requestBody            = $request->getParsedBody();
         $requestBody['user_id'] = $account['id'];
 
         $params = [
             'user_id' => $account['id'],
-            'title' => $requestBody['title'],
+            'title'   => $requestBody['title'],
             'message' => $requestBody['message'],
         ];
 

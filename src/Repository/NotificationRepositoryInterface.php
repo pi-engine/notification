@@ -9,6 +9,7 @@ interface NotificationRepositoryInterface
     public function getNotificationList(array $params = []): HydratingResultSet|array;
 
     public function getNotificationCount(array $params = []): int;
+
     public function getUnreadNotificationCount(array $params = []): int;
 
     public function addNotification(array $params): object|array;

@@ -10,16 +10,16 @@ use Notification\Model\IdValue\IdValue;
 use Notification\Model\Message\Message;
 use Notification\Model\Notification\Notification;
 use Notification\Model\Storage;
+use Notification\Repository\NotificationRepository;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Notification\Repository\NotificationRepository;
 
 class NotificationRepositoryFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param string $requestedName
-     * @param null|array $options
+     * @param string             $requestedName
+     * @param null|array         $options
      *
      * @return NotificationRepository
      * @throws ContainerExceptionInterface

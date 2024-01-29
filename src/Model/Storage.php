@@ -4,38 +4,48 @@ namespace Notification\Model;
 
 class Storage
 {
-    private mixed $id;
-    private int $sender_id;
-    private int $receiver_id;
+    private mixed  $id;
+    private int    $sender_id;
+    private int    $receiver_id;
     private string $type;
-    private int $status;
-    private int $viewed;
-    private int $sent;
-    private int $time_create;
-    private int $time_update;
+    private int    $status;
+    private int    $viewed;
+    private int    $sent;
+    private int    $time_create;
+    private int    $time_update;
     private string $information;
 
     /**
-     * @param mixed $id
-     * @param int $sender_id
-     * @param int $receiver_id
+     * @param mixed  $id
+     * @param int    $sender_id
+     * @param int    $receiver_id
      * @param string $type
-     * @param int $status
-     * @param int $viewed
-     * @param int $sent
-     * @param int $time_create
-     * @param int $time_update
+     * @param int    $status
+     * @param int    $viewed
+     * @param int    $sent
+     * @param int    $time_create
+     * @param int    $time_update
      * @param string $information
      */
-    public function __construct(mixed $id, int $sender_id, int $receiver_id, string $type, int $status, int $viewed, int $sent, int $time_create, int $time_update, string $information)
-    {
-        $this->id = $id;
-        $this->sender_id = $sender_id;
+    public function __construct(
+        mixed $id,
+        int $sender_id,
+        int $receiver_id,
+        string $type,
+        int $status,
+        int $viewed,
+        int $sent,
+        int $time_create,
+        int $time_update,
+        string $information
+    ) {
+        $this->id          = $id;
+        $this->sender_id   = $sender_id;
         $this->receiver_id = $receiver_id;
-        $this->type = $type;
-        $this->status = $status;
-        $this->viewed = $viewed;
-        $this->sent = $sent;
+        $this->type        = $type;
+        $this->status      = $status;
+        $this->viewed      = $viewed;
+        $this->sent        = $sent;
         $this->time_create = $time_create;
         $this->time_update = $time_update;
         $this->information = $information;

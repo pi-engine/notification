@@ -4,7 +4,6 @@ namespace Notification\Sender\Mail;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use function var_dump;
 
 class Mailer implements MailInterface
 {

@@ -4,12 +4,12 @@ namespace Notification\Factory\Handler\Api;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Notification\Handler\Api\CountHandler;
+use Notification\Service\NotificationService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Notification\Handler\Api\CountHandler;
-use Notification\Service\NotificationService;
 
 class CountHandlerFactory implements FactoryInterface
 {

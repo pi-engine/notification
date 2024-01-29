@@ -15,7 +15,7 @@ class KaveNegarFactory implements FactoryInterface
      *
      * @return  KaveNegar
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null):  KaveNegar
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): KaveNegar
     {
         return new  KaveNegar();
     }

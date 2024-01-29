@@ -2,13 +2,10 @@
 
 namespace Notification\Service;
 
-use IntlDateFormatter;
 use Notification\Repository\NotificationRepositoryInterface;
 use Notification\Sender\Mail\MailInterface;
 use Notification\Sender\Push\PushInterface;
 use Notification\Sender\SMS\SMSInterface;
-use User\Service\AccountService;
-use function var_dump;
 
 class NotificationService implements ServiceInterface
 {
@@ -32,17 +29,16 @@ class NotificationService implements ServiceInterface
      */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
-        MailInterface                   $mailInterface,
-        SMSInterface                    $smsInterface,
-        PushInterface                   $pushInterface,
-                                        $config
-    )
-    {
+        MailInterface $mailInterface,
+        SMSInterface $smsInterface,
+        PushInterface $pushInterface,
+        $config
+    ) {
         $this->notificationRepository = $notificationRepository;
-        $this->mailInterface = $mailInterface;
-        $this->smsInterface = $smsInterface;
-        $this->pushInterface = $pushInterface;
-        $this->config = $config;
+        $this->mailInterface          = $mailInterface;
+        $this->smsInterface           = $smsInterface;
+        $this->pushInterface          = $pushInterface;
+        $this->config                 = $config;
     }
 
     /**
@@ -53,16 +49,16 @@ class NotificationService implements ServiceInterface
     public function getNotificationList($params): array
     {
         // Get notifications list
-        $limit = $params['limit'] ?? 25;
-        $page = $params['page'] ?? 1;
-        $order = $params['order'] ?? ['time_create DESC', 'id DESC'];
+        $limit  = $params['limit'] ?? 25;
+        $page   = $params['page'] ?? 1;
+        $order  = $params['order'] ?? ['time_create DESC', 'id DESC'];
         $offset = ($page - 1) * $limit;
 
         // Set params
         $listParams = [
-            'page' => $page,
-            'limit' => $limit,
-            'order' => $order,
+            'page'   => $page,
+            'limit'  => $limit,
+            'order'  => $order,
             'offset' => $offset,
             'status' => 1,
         ];
@@ -72,7 +68,7 @@ class NotificationService implements ServiceInterface
         }
 
         // Get list
-        $list = [];
+        $list   = [];
         $rowSet = $this->notificationRepository->getNotificationList($listParams);
         foreach ($rowSet as $row) {
             $list[] = $this->canonizeNotification($row);
@@ -83,15 +79,15 @@ class NotificationService implements ServiceInterface
 
         return [
             'result' => true,
-            'data' => [
-                'list' => $list,
+            'data'   => [
+                'list'      => $list,
                 'paginator' => [
                     'count' => $count,
                     'limit' => $limit,
-                    'page' => $page,
+                    'page'  => $page,
                 ],
             ],
-            'error' => new \stdClass(),
+            'error'  => new \stdClass(),
         ];
     }
 
@@ -117,17 +113,17 @@ class NotificationService implements ServiceInterface
         // Set params
         $listParams = [
             'user_id' => $params['user_id'],
-            'viewed' => 0,
-            'status' => 1,
+            'viewed'  => 0,
+            'status'  => 1,
         ];
 
         return [
             'result' => true,
-            'data' => [
-                'count' => $this->notificationRepository->getNotificationCount($listParams),
+            'data'   => [
+                'count'  => $this->notificationRepository->getNotificationCount($listParams),
                 'unread' => $this->notificationRepository->getUnreadNotificationCount($listParams),
             ],
-            'error' => new \stdClass(),
+            'error'  => new \stdClass(),
         ];
     }
 
@@ -138,9 +134,9 @@ class NotificationService implements ServiceInterface
     {
         // Set params
         $updateParams = [
-            'id' => $params['id'],
+            'id'      => $params['id'],
             'user_id' => $params['user_id'],
-            'viewed' => 1,
+            'viewed'  => 1,
         ];
 
         $this->notificationRepository->updateNotification($updateParams);
@@ -159,26 +155,26 @@ class NotificationService implements ServiceInterface
 
         if (is_object($notification)) {
             $notification = [
-                'id' => (int)$notification->getId(),
-                'sender_id' => $notification->getSenderId(),
+                'id'          => (int)$notification->getId(),
+                'sender_id'   => $notification->getSenderId(),
                 'receiver_id' => $notification->getReceiverId(),
-                'type' => $notification->getType(),
-                'status' => $notification->getStatus(),
-                'viewed' => $notification->getViewed(),
-                'sent' => $notification->getSent(),
+                'type'        => $notification->getType(),
+                'status'      => $notification->getStatus(),
+                'viewed'      => $notification->getViewed(),
+                'sent'        => $notification->getSent(),
                 'time_create' => date('Y M d H:i:s', $notification->getTimeCreate()),
                 'time_update' => $notification->getTimeUpdate(),
                 'information' => $notification->getInformation(),
             ];
         } else {
             $notification = [
-                'id' => (int)$notification['id'],
-                'sender_id' => 3,
+                'id'          => (int)$notification['id'],
+                'sender_id'   => 3,
                 'receiver_id' => $notification['receiver_id'],
-                'type' => $notification['type'],
-                'status' => $notification['status'],
-                'viewed' => $notification['viewed'],
-                'sent' => $notification['sent'],
+                'type'        => $notification['type'],
+                'status'      => $notification['status'],
+                'viewed'      => $notification['viewed'],
+                'sent'        => $notification['sent'],
                 'time_create' => date('m/d/Y H:i:s', $notification['time_create']),
                 'time_update' => $notification['time_update'],
                 'information' => $notification['information'],
@@ -218,14 +214,14 @@ class NotificationService implements ServiceInterface
         if (isset($params['information']) && !empty($params['information'])) {
             // Set params
             $addParams = [
-                'sender_id' => $params['information']['sender_id'],
+                'sender_id'   => $params['information']['sender_id'],
                 'receiver_id' => $params['information']['receiver_id'],
-                'type' => $params['information']['type'],
-                'viewed' => 0,
-                'sent' => 1,
+                'type'        => $params['information']['type'],
+                'viewed'      => 0,
+                'sent'        => 1,
                 'time_create' => time(),
                 'time_update' => time(),
-                'information' => json_encode($params['information'], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT),
+                'information' => json_encode($params['information'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
             ];
             if (isset($params['information']['viewed'])) {
                 $addParams['viewed'] = $params['information']['viewed'];
@@ -240,23 +236,23 @@ class NotificationService implements ServiceInterface
      */
     public function middleSend($params): array
     {
-        $notificationParams = [
+        $notificationParams         = [
             'information' =>
                 [
                     "device_token" => '/topics/global',
-                    "in_app" => false,
+                    "in_app"       => false,
                     "in_app_title" => $params['title'],
-                    "title" => $params['title'],
-                    "in_app_body" => $params['message'],
-                    "body" => $params['message'],
-                    "event" => 'global',
-                    "user_id" => (int)$params['user_id'],
-                    "item_id" => 0,
-                    "viewed" => 1,
-                    "sender_id" => $params['user_id'],
-                    "type" => 'global',
-                    "image_url" => '',
-                    "receiver_id" => 0
+                    "title"        => $params['title'],
+                    "in_app_body"  => $params['message'],
+                    "body"         => $params['message'],
+                    "event"        => 'global',
+                    "user_id"      => (int)$params['user_id'],
+                    "item_id"      => 0,
+                    "viewed"       => 1,
+                    "sender_id"    => $params['user_id'],
+                    "type"         => 'global',
+                    "image_url"    => '',
+                    "receiver_id"  => 0,
                 ],
         ];
         $notificationParams['push'] = $notificationParams['information'];

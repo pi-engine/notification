@@ -4,12 +4,12 @@ namespace Notification\Handler\Api;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\JsonResponse;
+use Notification\Service\NotificationService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Notification\Service\NotificationService;
 
 class CountHandler implements RequestHandlerInterface
 {

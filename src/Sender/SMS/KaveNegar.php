@@ -15,12 +15,12 @@ class KaveNegar implements SMSInterface
         $smsParams = [
             'userName' => $config['username'],
             'password' => $config['password'],
-            'sender' => $config['number'],
+            'sender'   => $config['number'],
             'receptor' => [str_replace('+98', '0', $params['mobile'])],
-            'message' => $params['message'],
+            'message'  => $params['message'],
             'unixdate' => 0,
-            'msgmode' => 1,
-            'status' => 1,
+            'msgmode'  => 1,
+            'status'   => 1,
         ];
 
         // Send SMS
