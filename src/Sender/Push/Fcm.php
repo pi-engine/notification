@@ -44,15 +44,22 @@ class Fcm implements PushInterface
             'event'        => $event,
             "image_url"    => $image_url,
         ];
+        $has_data   = true;
         if (isset($params['custom_information'])) {
             $notData['custom_information'] = $params['custom_information'];
+            if(isset($params['custom_information']['is_only_data'])){
+                $has_data = $params['custom_information']['is_only_data'];
+            }
         }
-        $arrayToSend = ['to' => $token, 'data' => $notData, 'notification' => $notification, 'apns' => $apns, 'priority' => 'high'];
-        $json        = json_encode($arrayToSend);
-        $headers     = [];
-        $headers[]   = 'Content-Type: application/json';
-        $headers[]   = 'Authorization: key=' . $serverKey;
-        $ch          = curl_init();
+        $arrayToSend                    = ['to' => $token, 'data' => $notData, 'apns' => $apns, 'priority' => 'high'];
+        if($has_data){
+            $arrayToSend['notification']=  $notification;
+        }
+        $json                           = json_encode($arrayToSend);
+        $headers                        = [];
+        $headers[]                      = 'Content-Type: application/json';
+        $headers[]                      = 'Authorization: key=' . $serverKey;
+        $ch                             = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
