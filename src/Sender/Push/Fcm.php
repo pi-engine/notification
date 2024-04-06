@@ -48,7 +48,7 @@ class Fcm implements PushInterface
         if (isset($params['custom_information'])) {
             $notData['custom_information'] = $params['custom_information'];
             if(isset($params['custom_information']['is_only_data'])){
-                $has_data = $params['custom_information']['is_only_data'];
+                $has_data = !$params['custom_information']['is_only_data'];
             }
         }
         $arrayToSend                    = ['to' => $token, 'data' => $notData, 'apns' => $apns, 'priority' => 'high'];
