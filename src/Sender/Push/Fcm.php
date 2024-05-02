@@ -44,29 +44,29 @@ class Fcm implements PushInterface
             'event'        => $event,
             "image_url"    => $image_url,
         ];
-        $has_data   = true;
+        $has_data     = true;
         if (isset($params['custom_information'])) {
             $notData['custom_information'] = $params['custom_information'];
-            if(isset($params['custom_information']['is_only_data'])){
+            if (isset($params['custom_information']['is_only_data'])) {
                 $has_data = !$params['custom_information']['is_only_data'];
             }
 
-            if(isset($params['custom_information']['notification_information'])){
-                $notification['title']=$params['custom_information']['notification_information']['title'];
-                $notification['body']=$params['custom_information']['notification_information']['body'];
-                $notData['in_app_title']=$params['custom_information']['notification_information']['in_app_title'];
-                $notData['in_app_body']=$params['custom_information']['notification_information']['in_app_body'];
+            if (isset($params['custom_information']['notification_information'])) {
+                $notification['title']   = $params['custom_information']['notification_information']['title'];
+                $notification['body']    = $params['custom_information']['notification_information']['body'];
+                $notData['in_app_title'] = $params['custom_information']['notification_information']['in_app_title'];
+                $notData['in_app_body']  = $params['custom_information']['notification_information']['in_app_body'];
             }
         }
-        $arrayToSend                    = ['to' => $token, 'data' => $notData, 'apns' => $apns, 'priority' => 'high'];
-        if($has_data){
-            $arrayToSend['notification']=  $notification;
+        $arrayToSend = ['to' => $token, 'data' => $notData, 'apns' => $apns, 'priority' => 'high'];
+        if ($has_data) {
+            $arrayToSend['notification'] = $notification;
         }
-        $json                           = json_encode($arrayToSend);
-        $headers                        = [];
-        $headers[]                      = 'Content-Type: application/json';
-        $headers[]                      = 'Authorization: key=' . $serverKey;
-        $ch                             = curl_init();
+        $json      = json_encode($arrayToSend);
+        $headers   = [];
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key=' . $serverKey;
+        $ch        = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
