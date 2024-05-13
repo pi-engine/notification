@@ -89,9 +89,12 @@ class Fcm implements PushInterface
 
     private function utility($text): string
     {
-        $limitation = $this->config['push']['setting']['limitation'];
-        $xss = $this->config['push']['setting']['xss'];
-        $text = $limitation['status'] ? ((strlen($text) > $limitation['length']) ? substr($text, 0, $limitation['length']) . '...' : $text) : $text;
-        return $xss['status'] ? htmlspecialchars($text, ENT_QUOTES, 'UTF-8') : $text;
+        if (isset($this->config['push']['setting'])) {
+            $limitation = $this->config['push']['setting']['limitation'];
+            $xss = $this->config['push']['setting']['xss'];
+            $text = $limitation['status'] ? ((strlen($text) > $limitation['length']) ? substr($text, 0, $limitation['length']) . '...' : $text) : $text;
+            $text = $xss['status'] ? htmlspecialchars($text, ENT_QUOTES, 'UTF-8') : $text;
+        }
+        return $text;
     }
 }
