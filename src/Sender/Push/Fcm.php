@@ -59,9 +59,10 @@ class Fcm implements PushInterface
         $has_data = true;
         if (isset($params['custom_information'])) {
             $notData['custom_information'] = $params['custom_information'];
-            if (isset($params['custom_information']['is_only_data'])) {
-                $has_data = !$params['custom_information']['is_only_data'];
-            }
+            ///TODO: decide for this
+//            if (isset($params['custom_information']['is_only_data'])) {
+//                $has_data = !$params['custom_information']['is_only_data'];
+//            }
 
             if (isset($params['custom_information']['notification_information'])) {
                 $notification['title'] = $params['custom_information']['notification_information']['title'];
@@ -71,9 +72,10 @@ class Fcm implements PushInterface
             }
         }
         $arrayToSend = ['to' => $token, 'data' => $notData, 'apns' => $apns, 'priority' => 'high'];
-        if ($has_data) {
+        ///TODO: decide for this
+       // if ($has_data) {
             $arrayToSend['notification'] = $notification;
-        }
+       // }
         $json = json_encode($arrayToSend);
         $headers = [];
         $headers[] = 'Content-Type: application/json';
