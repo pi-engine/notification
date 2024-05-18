@@ -33,5 +33,14 @@ return [
         'push'  => [
             'fcm' => [],
         ],
+        'setting'=>[
+            'limitation'=>[
+                'status'=>true,
+                'length'=>150
+            ],
+            'xss'=>[
+                'status'=>true,
+            ]
+        ]
     ],
 ];
