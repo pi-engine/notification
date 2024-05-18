@@ -64,12 +64,12 @@ class Fcm implements PushInterface
 //                $has_data = !$params['custom_information']['is_only_data'];
 //            }
 
-            if (isset($params['custom_information']['notification_information'])) {
-                $notification['title'] = $params['custom_information']['notification_information']['title'];
-                $notification['body'] = $params['custom_information']['notification_information']['body'];
-                $notData['in_app_title'] = $params['custom_information']['notification_information']['in_app_title'];
-                $notData['in_app_body'] = $params['custom_information']['notification_information']['in_app_body'];
-            }
+//            if (isset($params['custom_information']['notification_information'])) {
+//                $notification['title'] = $params['custom_information']['notification_information']['title'];
+//                $notification['body'] = $params['custom_information']['notification_information']['body'];
+//                $notData['in_app_title'] = $params['custom_information']['notification_information']['in_app_title'];
+//                $notData['in_app_body'] = $params['custom_information']['notification_information']['in_app_body'];
+//            }
         }
         $arrayToSend = ['to' => $token, 'data' => $notData, 'apns' => $apns, 'priority' => 'high'];
         ///TODO: decide for this
