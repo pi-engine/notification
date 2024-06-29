@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Handler\Api;
+namespace Notification\Handler\Admin;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ListHandler implements RequestHandlerInterface
+class SendHandler implements RequestHandlerInterface
 {
     /** @var ResponseFactoryInterface */
     protected ResponseFactoryInterface $responseFactory;
@@ -34,21 +34,35 @@ class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // Get account
-        $account = $request->getAttribute('account');
+        // Retrieve the raw JSON data from the request body
+        $stream      = $this->streamFactory->createStreamFromFile('php://input');
+        $rawData     = $stream->getContents();
+        $requestBody = json_decode($rawData, true);
 
-        // Get request body
-        $requestBody = $request->getParsedBody();
+        // Check if decoding was successful
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            // JSON decoding failed
+            $errorResponse = [
+                'result' => false,
+                'data'   => null,
+                'error'  => [
+                    'message' => 'Invalid JSON data',
+                ],
+            ];
+            return new JsonResponse($errorResponse, StatusCodeInterface::STATUS_UNAUTHORIZED);
+        }
 
-        // Set record params
-        $params = [
-            'user_id' => $account['id'],
-            'page'    => $requestBody['page'] ?? 1,
-            'limit'   => $requestBody['limit'] ?? 25,
+        // Send notification
+        $this->notificationService->send($requestBody);
+
+        // Set result
+        $result = [
+            'result' => true,
+            'data'   => [
+                'message' => 'Message sent successfully !',
+            ],
+            'error'  => [],
         ];
-
-        // Get list of notifications
-        $result = $this->notificationService->getNotificationList($params);
 
         return new JsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
     }

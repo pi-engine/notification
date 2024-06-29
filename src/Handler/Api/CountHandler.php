@@ -22,7 +22,6 @@ class CountHandler implements RequestHandlerInterface
     /** @var NotificationService */
     protected NotificationService $notificationService;
 
-
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,

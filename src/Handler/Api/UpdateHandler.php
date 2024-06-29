@@ -41,26 +41,22 @@ class UpdateHandler implements RequestHandlerInterface
         $requestBody = $request->getParsedBody();
 
         $params = [
-            "receiver_id" => $account['id'],
-            "id"          => $requestBody["id"],
-            "viewed"      => 1,
+            'receiver_id' => $account['id'],
+            'id'          => $requestBody['id'],
+            'viewed'      => 1,
         ];
 
-//        // Set params
-//        $params = [
-//            'mail' => [
-//
-//            ],
-//            'sms' => [
-//
-//            ],
-//            'push' => [
-//
-//            ],
-//        ];
-
         // Update notification
-        $result = $this->notificationService->middleUpdate($params);
+        $this->notificationService->middleUpdate($params);
+
+        // Set result
+        $result = [
+            'result' => true,
+            'data'   => [
+                'message' => 'Message updated successfully !',
+            ],
+            'error'  => [],
+        ];
 
         return new JsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
     }

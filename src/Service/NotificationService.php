@@ -6,6 +6,7 @@ use Notification\Repository\NotificationRepositoryInterface;
 use Notification\Sender\Mail\MailInterface;
 use Notification\Sender\Push\PushInterface;
 use Notification\Sender\SMS\SMSInterface;
+use User\Service\UtilityService;
 
 class NotificationService implements ServiceInterface
 {
@@ -21,6 +22,9 @@ class NotificationService implements ServiceInterface
     /* @var PushInterface */
     protected PushInterface $pushInterface;
 
+    /** @var UtilityService */
+    protected UtilityService $utilityService;
+
     /* @var array */
     protected array $config;
 
@@ -32,12 +36,14 @@ class NotificationService implements ServiceInterface
         MailInterface $mailInterface,
         SMSInterface $smsInterface,
         PushInterface $pushInterface,
+        UtilityService $utilityService,
         $config
     ) {
         $this->notificationRepository = $notificationRepository;
         $this->mailInterface          = $mailInterface;
         $this->smsInterface           = $smsInterface;
         $this->pushInterface          = $pushInterface;
+        $this->utilityService         = $utilityService;
         $this->config                 = $config;
     }
 
@@ -110,18 +116,17 @@ class NotificationService implements ServiceInterface
      */
     public function getNotViewedCount($params): array
     {
-        // Set params
-        $listParams = [
-            'user_id' => $params['user_id'],
-            'viewed'  => 0,
-            'status'  => 1,
-        ];
-
         return [
             'result' => true,
             'data'   => [
-                'count'  => $this->notificationRepository->getNotificationCount($listParams),
-                'unread' => $this->notificationRepository->getUnreadNotificationCount($listParams),
+                'count'  => $this->notificationRepository->getNotificationCount([
+                    'user_id' => $params['user_id'],
+                    'status'  => 1,
+                ]),
+                'unread' => $this->notificationRepository->getUnreadNotificationCount([
+                    'user_id' => $params['user_id'],
+                    'status'  => 1,
+                ]),
             ],
             'error'  => new \stdClass(),
         ];
@@ -156,30 +161,41 @@ class NotificationService implements ServiceInterface
         if (is_object($notification)) {
             $notification = [
                 'id'          => (int)$notification->getId(),
+                'company_id'  => $notification->getCompanyId(),
                 'sender_id'   => $notification->getSenderId(),
                 'receiver_id' => $notification->getReceiverId(),
                 'type'        => $notification->getType(),
                 'status'      => $notification->getStatus(),
                 'viewed'      => $notification->getViewed(),
-                'sent'        => $notification->getSent(),
-                'time_create' => date('Y M d H:i:s', $notification->getTimeCreate()),
+                'time_create' => $notification->getTimeCreate(),
                 'time_update' => $notification->getTimeUpdate(),
+                'sent'        => $notification->getSent(),
                 'information' => $notification->getInformation(),
             ];
         } else {
             $notification = [
                 'id'          => (int)$notification['id'],
-                'sender_id'   => 3,
+                'company_id'  => $notification['company_id'],
+                'sender_id'   => $notification['sender_id'],
                 'receiver_id' => $notification['receiver_id'],
                 'type'        => $notification['type'],
                 'status'      => $notification['status'],
                 'viewed'      => $notification['viewed'],
-                'sent'        => $notification['sent'],
-                'time_create' => date('m/d/Y H:i:s', $notification['time_create']),
+                'time_create' => $notification['time_create'],
                 'time_update' => $notification['time_update'],
+                'sent'        => $notification['sent'],
                 'information' => $notification['information'],
             ];
         }
+
+        //
+
+        // Set time view
+        $notification['time_create_view'] = $this->utilityService->date($notification['time_create']);
+        $notification['time_update_view'] = $this->utilityService->date($notification['time_update']);
+
+        // ToDo: Check it for change key or delete
+        $notification['time_create']      = date('Y M d H:i:s', $notification['time_create']);
 
         // Set information
         $information = (!empty($notification['information'])) ? json_decode($notification['information'], true) : [];
@@ -208,13 +224,12 @@ class NotificationService implements ServiceInterface
             $this->pushInterface->send($this->config['push'][$side], $params['push']);
         }
 
-//        var_dump($params);
         // Save to DB
-
         if (isset($params['information']) && !empty($params['information'])) {
             // Set params
             $addParams = [
-                'sender_id'   => $params['information']['sender_id'],
+                'company_id'  => $params['information']['company_id'] ?? 0,
+                'sender_id'   => $params['information']['sender_id'] ?? 0,
                 'receiver_id' => $params['information']['receiver_id'],
                 'type'        => $params['information']['type'],
                 'viewed'      => 0,
@@ -223,9 +238,11 @@ class NotificationService implements ServiceInterface
                 'time_update' => time(),
                 'information' => json_encode($params['information'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
             ];
+
             if (isset($params['information']['viewed'])) {
                 $addParams['viewed'] = $params['information']['viewed'];
             }
+
             // Add notification to DB
             $this->notificationRepository->addNotification($addParams);
         }
@@ -236,29 +253,31 @@ class NotificationService implements ServiceInterface
      */
     public function middleSend($params): array
     {
-        $notificationParams         = [
+        $notificationParams = [
             'information' =>
                 [
-                    "device_token" => '/topics/global',
-                    "in_app"       => false,
-                    "in_app_title" => $params['title'],
-                    "title"        => $params['title'],
-                    "in_app_body"  => $params['message'],
-                    "body"         => $params['message'],
-                    "event"        => 'global',
-                    "user_id"      => (int)$params['user_id'],
-                    "item_id"      => 0,
-                    "viewed"       => 1,
-                    "sender_id"    => $params['user_id'],
-                    "type"         => 'global',
-                    "image_url"    => '',
-                    "receiver_id"  => 0,
+                    'device_token' => '/topics/global',
+                    'in_app'       => false,
+                    'in_app_title' => $params['title'],
+                    'title'        => $params['title'],
+                    'in_app_body'  => $params['message'],
+                    'body'         => $params['message'],
+                    'event'        => 'global',
+                    'user_id'      => (int)$params['user_id'],
+                    'item_id'      => 0,
+                    'viewed'       => 1,
+                    'sender_id'    => $params['user_id'],
+                    'type'         => 'global',
+                    'image_url'    => '',
+                    'receiver_id'  => 0,
                 ],
         ];
+
         $notificationParams['push'] = $notificationParams['information'];
         $this->send($notificationParams, 'customer');
+
         return [
-            "result" => true,
+            'result' => true,
         ];
     }
 

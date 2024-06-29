@@ -11,6 +11,7 @@ use Notification\Sender\SMS\SMSInterface;
 use Notification\Service\NotificationService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use User\Service\UtilityService;
 
 class NotificationServiceFactory implements FactoryInterface
 {
@@ -33,6 +34,7 @@ class NotificationServiceFactory implements FactoryInterface
             $container->get(MailInterface::class),
             $container->get(SMSInterface::class),
             $container->get(PushInterface::class),
+            $container->get(UtilityService::class),
             $config['notification']
         );
     }

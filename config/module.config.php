@@ -4,7 +4,9 @@ namespace Notification;
 
 use Laminas\Mvc\Middleware\PipeSpec;
 use Laminas\Router\Http\Literal;
+use Logger\Middleware\LoggerRequestMiddleware;
 use User\Middleware\AuthenticationMiddleware;
+use User\Middleware\AuthorizationMiddleware;
 use User\Middleware\InstallerMiddleware;
 use User\Middleware\SecurityMiddleware;
 
@@ -19,6 +21,7 @@ return [
         'factories' => [
             Repository\NotificationRepository::class => Factory\Repository\NotificationRepositoryFactory::class,
             Service\NotificationService::class       => Factory\Service\NotificationServiceFactory::class,
+            Handler\Admin\SendHandler::class         => Factory\Handler\Admin\SendHandlerFactory::class,
             Handler\Api\ListHandler::class           => Factory\Handler\Api\ListHandlerFactory::class,
             Handler\Api\SendHandler::class           => Factory\Handler\Api\SendHandlerFactory::class,
             Handler\Api\UpdateHandler::class         => Factory\Handler\Api\UpdateHandlerFactory::class,
@@ -77,6 +80,7 @@ return [
                                 'middleware'  => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
+                                    LoggerRequestMiddleware::class,
                                     Handler\Api\ListHandler::class
                                 ),
                             ],
@@ -117,6 +121,7 @@ return [
                                 'middleware'  => new PipeSpec(
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
+                                    LoggerRequestMiddleware::class,
                                     Handler\Api\UpdateHandler::class
                                 ),
                             ],
@@ -132,6 +137,28 @@ return [
                     'defaults' => [],
                 ],
                 'child_routes' => [
+                    'send'      => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => '/send',
+                            'defaults' => [
+                                'title'       => 'Admin notification send',
+                                'module'      => 'notification',
+                                'section'     => 'admin',
+                                'package'     => 'notification',
+                                'handler'     => 'send',
+                                'permissions' => 'notification-send',
+                                'controller'  => PipeSpec::class,
+                                'middleware'  => new PipeSpec(
+                                    SecurityMiddleware::class,
+                                    AuthenticationMiddleware::class,
+                                    AuthorizationMiddleware::class,
+                                    LoggerRequestMiddleware::class,
+                                    Handler\Admin\SendHandler::class
+                                ),
+                            ],
+                        ],
+                    ],
                     // Admin installer
                     'installer' => [
                         'type'    => Literal::class,

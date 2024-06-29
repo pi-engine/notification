@@ -11,9 +11,6 @@ use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Update;
 use Laminas\Hydrator\HydratorInterface;
-use Notification\Model\IdValue\IdValue;
-use Notification\Model\Message\Message;
-use Notification\Model\Notification\Notification;
 use Notification\Model\Storage;
 use RuntimeException;
 
@@ -59,10 +56,11 @@ class NotificationRepository implements NotificationRepositoryInterface
      */
     public function getNotificationList(array $params = []): HydratingResultSet|array
     {
-        $where = [];
-        // if (isset($params['user_id']) && !empty($params['user_id'])) {
-        // $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') '];
-        // }
+        /* $where = [];
+        if (isset($params['user_id']) && !empty($params['user_id'])) {
+            $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') '];
+        } */
+
         $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
         if (isset($params['status']) && !empty($params['status'])) {
             $where['status'] = $params['status'];
@@ -76,7 +74,6 @@ class NotificationRepository implements NotificationRepositoryInterface
         if (isset($params['id']) && !empty($params['id'])) {
             $where['id'] = $params['id'];
         }
-
 
         $sql       = new Sql($this->db);
         $select    = $sql->select($this->tableNotification)->where($where)->order($params['order'])->offset($params['offset'])->limit($params['limit']);
@@ -102,11 +99,12 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         // Set where
         $columns = ['count' => new Expression('count(*)')];
-        $where   = [];
 
-//        if (isset($params['user_id']) && !empty($params['user_id'])) {
-//            $where['user_id'] = $params['user_id'];
-//        }
+        /* $where   = [];
+        if (isset($params['user_id']) && !empty($params['user_id'])) {
+            $where['user_id'] = $params['user_id'];
+        } */
+
         $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
         if (isset($params['status']) && !empty($params['status'])) {
             $where['status'] = $params['status'];
@@ -139,20 +137,20 @@ class NotificationRepository implements NotificationRepositoryInterface
         // Set where
         $columns = ['count' => new Expression('count(*)')];
 
-//        if (isset($params['user_id']) && !empty($params['user_id'])) {
-//            $where['user_id'] = $params['user_id'];
-//        }
-        $where = [];
+        /* if (isset($params['user_id']) && !empty($params['user_id'])) {
+            $where['user_id'] = $params['user_id'];
+        } */
+        /* if (isset($params['viewed']) && !empty($params['viewed'])) {
+            $where['viewed'] = $params['viewed'];
+        } */
+        $where = [
+            'viewed' => 0,
+        ];
         if (isset($params['user_id']) && !empty($params['user_id'])) {
-            $where = ['receiver_id IN (' . $params['user_id'] . ')  '];
+            $where['receiver_id'] = $params['user_id'];
         }
-
-        $where["viewed"] = 0;
         if (isset($params['status']) && !empty($params['status'])) {
             $where['status'] = $params['status'];
-        }
-        if (isset($params['viewed']) && !empty($params['viewed'])) {
-            $where['viewed'] = $params['viewed'];
         }
         if (isset($params['sent']) && !empty($params['sent'])) {
             $where['sent'] = $params['sent'];
@@ -236,7 +234,12 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         $update = new Update($this->tableNotification);
         $update->set($params);
-        $update->where(['id' => $params['id'], 'receiver_id' => $params['receiver_id']]);
+        $update->where(
+            [
+                'id'          => $params['id'],
+                'receiver_id' => $params['receiver_id'],
+            ]
+        );
 
         $sql       = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($update);
@@ -258,7 +261,6 @@ class NotificationRepository implements NotificationRepositoryInterface
     public function deleteNotification(array $params): void
     {
         $delete = new Delete($this->tableNotification);
-        $delete->set($params);
         $delete->where(['id' => $params['id']]);
 
         $sql       = new Sql($this->db);

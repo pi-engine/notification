@@ -1,6 +1,19 @@
 <?php
 
 return [
+    'admin' => [
+        [
+            'title'       => 'Admin notification send',
+            'module'      => 'notification',
+            'section'     => 'admin',
+            'package'     => 'notification',
+            'handler'     => 'send',
+            'permissions' => 'notification-notification-send',
+            'role'        => [
+                'admin',
+            ],
+        ],
+    ],
     'api' => [
         [
             'title'       => 'Notification count',
