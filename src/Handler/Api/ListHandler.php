@@ -45,7 +45,9 @@ class ListHandler implements RequestHandlerInterface
             'user_id' => $account['id'],
             'page'    => $requestBody['page'] ?? 1,
             'limit'   => $requestBody['limit'] ?? 25,
-        ];
+            'order'   => (isset($requestBody['order']) && !empty($requestBody['order']))
+                ? [$requestBody['order'], 'id DESC']
+                : ['time_create DESC', 'id DESC']];
 
         // Get list of notifications
         $result = $this->notificationService->getNotificationList($params);
