@@ -8,6 +8,7 @@ use Logger\Middleware\LoggerRequestMiddleware;
 use User\Middleware\AuthenticationMiddleware;
 use User\Middleware\AuthorizationMiddleware;
 use User\Middleware\InstallerMiddleware;
+use User\Middleware\RequestPreparationMiddleware;
 use User\Middleware\SecurityMiddleware;
 
 return [
@@ -57,7 +58,8 @@ return [
                                 'handler'     => 'count',
                                 'permissions' => 'notification-count',
                                 'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'middleware' => new PipeSpec(
+                                    RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     Handler\Api\CountHandler::class
@@ -77,7 +79,8 @@ return [
                                 'handler'     => 'list',
                                 'permissions' => 'notification-list',
                                 'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'middleware' => new PipeSpec(
+                                    RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     LoggerRequestMiddleware::class,
@@ -98,7 +101,8 @@ return [
                                 'handler'     => 'send',
                                 'permissions' => 'notification-send',
                                 'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'middleware' => new PipeSpec(
+                                    RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     Handler\Api\SendHandler::class
@@ -118,7 +122,8 @@ return [
                                 'handler'     => 'send',
                                 'permissions' => 'notification-send',
                                 'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'middleware' => new PipeSpec(
+                                    RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     LoggerRequestMiddleware::class,
@@ -149,7 +154,8 @@ return [
                                 'handler'     => 'send',
                                 'permissions' => 'notification-send',
                                 'controller'  => PipeSpec::class,
-                                'middleware'  => new PipeSpec(
+                                'middleware' => new PipeSpec(
+                                    RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     AuthorizationMiddleware::class,
@@ -171,6 +177,7 @@ return [
                                 'handler'    => 'installer',
                                 'controller' => PipeSpec::class,
                                 'middleware' => new PipeSpec(
+                                    RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     InstallerMiddleware::class,
