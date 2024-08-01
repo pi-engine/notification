@@ -4,7 +4,7 @@ namespace Notification;
 
 use Laminas\Mvc\Middleware\PipeSpec;
 use Laminas\Router\Http\Literal;
-use Logger\Middleware\LoggerRequestMiddleware;
+use Logger\Middleware\LoggerRequestResponseMiddleware;
 use User\Middleware\AuthenticationMiddleware;
 use User\Middleware\AuthorizationMiddleware;
 use User\Middleware\InstallerMiddleware;
@@ -83,7 +83,7 @@ return [
                                     RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
-                                    LoggerRequestMiddleware::class,
+                                    LoggerRequestResponseMiddleware::class,
                                     Handler\Api\ListHandler::class
                                 ),
                             ],
@@ -126,7 +126,7 @@ return [
                                     RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
-                                    LoggerRequestMiddleware::class,
+                                    LoggerRequestResponseMiddleware::class,
                                     Handler\Api\UpdateHandler::class
                                 ),
                             ],
@@ -159,7 +159,7 @@ return [
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     AuthorizationMiddleware::class,
-                                    LoggerRequestMiddleware::class,
+                                    LoggerRequestResponseMiddleware::class,
                                     Handler\Admin\SendHandler::class
                                 ),
                             ],
