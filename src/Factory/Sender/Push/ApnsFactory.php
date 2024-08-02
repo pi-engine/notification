@@ -4,20 +4,20 @@ namespace Notification\Factory\Sender\Push;
 
 use Interop\Container\Containerinterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Sender\Push\Fcm;
+use Notification\Sender\Push\Apns;
 
-class FcmFactory implements FactoryInterface
+class ApnsFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param string             $requestedName
      * @param null|array         $options
      *
-     * @return Fcm
+     * @return Apns
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Fcm
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Apns
     {
         $config = $container->get('config');
-        return new Fcm($config['notification']);
+        return new Apns($config['notification']);
     }
 }

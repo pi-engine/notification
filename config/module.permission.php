@@ -3,6 +3,17 @@
 return [
     'admin' => [
         [
+            'title'       => 'Admin notification list',
+            'module'      => 'notification',
+            'section'     => 'admin',
+            'package'     => 'notification',
+            'handler'     => 'list',
+            'permissions' => 'notification-notification-list',
+            'role'        => [
+                'admin',
+            ],
+        ],
+        [
             'title'       => 'Admin notification send',
             'module'      => 'notification',
             'section'     => 'admin',

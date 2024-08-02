@@ -3,9 +3,14 @@
 namespace Notification\Service;
 
 use Notification\Repository\NotificationRepositoryInterface;
-use Notification\Sender\Mail\MailInterface;
-use Notification\Sender\Push\PushInterface;
-use Notification\Sender\SMS\SMSInterface;
+use Notification\Sender\Mail\LaminasMail;
+use Notification\Sender\Mail\Mailer;
+use Notification\Sender\Push\Apns;
+use Notification\Sender\Push\Fcm;
+use Notification\Sender\SMS\KaveNegar;
+use Notification\Sender\SMS\Nexmo;
+use Notification\Sender\SMS\PayamakYab;
+use Notification\Sender\SMS\Twilio;
 use User\Service\UtilityService;
 
 class NotificationService implements ServiceInterface
@@ -13,17 +18,32 @@ class NotificationService implements ServiceInterface
     /* @var NotificationRepositoryInterface */
     protected NotificationRepositoryInterface $notificationRepository;
 
-    /* @var MailInterface */
-    protected MailInterface $mailInterface;
-
-    /* @var SMSInterface */
-    protected SMSInterface $smsInterface;
-
-    /* @var PushInterface */
-    protected PushInterface $pushInterface;
-
     /** @var UtilityService */
     protected UtilityService $utilityService;
+
+    /** @var LaminasMail */
+    protected LaminasMail $laminasMailSender;
+
+    /** @var Mailer */
+    protected Mailer $mailerSender;
+
+    /** @var Fcm */
+    protected Fcm $fcmSender;
+
+    /** @var Apns */
+    protected Apns $apnsSender;
+
+    /** @var Twilio */
+    protected Twilio $twilioSender;
+
+    /** @var Nexmo */
+    protected Nexmo $nexmoSender;
+
+    /** @var PayamakYab */
+    protected PayamakYab $payamakYabSender;
+
+    /** @var KaveNegar */
+    protected KaveNegar $kaveNegarSender;
 
     /* @var array */
     protected array $config;
@@ -33,17 +53,27 @@ class NotificationService implements ServiceInterface
      */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
-        MailInterface $mailInterface,
-        SMSInterface $smsInterface,
-        PushInterface $pushInterface,
         UtilityService $utilityService,
+        LaminasMail $laminasMailSender,
+        Mailer $mailerSender,
+        Fcm $fcmSender,
+        Apns $apnsSender,
+        Twilio $twilioSender,
+        Nexmo $nexmoSender,
+        PayamakYab $payamakYabSender,
+        KaveNegar $kaveNegarSender,
         $config
     ) {
         $this->notificationRepository = $notificationRepository;
-        $this->mailInterface          = $mailInterface;
-        $this->smsInterface           = $smsInterface;
-        $this->pushInterface          = $pushInterface;
         $this->utilityService         = $utilityService;
+        $this->laminasMailSender      = $laminasMailSender;
+        $this->mailerSender           = $mailerSender;
+        $this->fcmSender              = $fcmSender;
+        $this->apnsSender             = $apnsSender;
+        $this->twilioSender           = $twilioSender;
+        $this->nexmoSender            = $nexmoSender;
+        $this->payamakYabSender       = $payamakYabSender;
+        $this->kaveNegarSender        = $kaveNegarSender;
         $this->config                 = $config;
     }
 
@@ -195,7 +225,7 @@ class NotificationService implements ServiceInterface
         $notification['time_update_view'] = $this->utilityService->date($notification['time_update']);
 
         // ToDo: Check it for change key or delete
-        $notification['time_create']      = date('Y M d H:i:s', $notification['time_create']);
+        $notification['time_create'] = date('Y M d H:i:s', $notification['time_create']);
 
         // Set information
         $information = (!empty($notification['information'])) ? json_decode($notification['information'], true) : [];
@@ -207,21 +237,26 @@ class NotificationService implements ServiceInterface
     /**
      * @param $params
      */
-    public function send($params, $side = 'customer'): void
+    public function send($params, $section = 'customer'): void
     {
-        // Send notification as mail
+        // Set sender
+        $emailSender = $params['email_sender'] ?? 'mailer';
+        $smsSender   = $params['sms_sender'] ?? 'twilio';
+        $pushSender  = $params['push_sender'] ?? 'fcm';
+
+        // Send a mail notification
         if (isset($params['email']) && !empty($params['email'])) {
-            $this->mailInterface->send($this->config['email'], $params['email']);
+            $this->sendEmail($emailSender, $params['email']);
         }
 
-        // Send notification as SMS
+        // Send a sms notification
         if (isset($params['sms']) && !empty($params['sms'])) {
-            $this->smsInterface->send($this->config['sms'], $params['sms']);
+            $this->sendSms($smsSender, $params['sms']);
         }
 
-        // Send notification and push
+        // Send a push notification
         if (isset($params['push']) && !empty($params['push'])) {
-            $this->pushInterface->send($this->config['push'][$side], $params['push']);
+            $this->sendPush($pushSender, $section, $params['push']);
         }
 
         // Save to DB
@@ -287,5 +322,55 @@ class NotificationService implements ServiceInterface
     public function middleUpdate($params): void
     {
         $this->notificationRepository->updateNotification($params);
+    }
+
+    protected function sendEmail($emailSender, $emailParams): void
+    {
+        switch ($emailSender) {
+            default:
+            case 'mailer':
+                $this->mailerSender->send($this->config['email'], $emailParams);
+                break;
+
+            case 'laminasMail':
+                $this->laminasMailSender->send($this->config['email'], $emailParams);
+                break;
+        }
+    }
+
+    protected function sendSms($smsSender, $smsParams): void
+    {
+        switch ($smsSender) {
+            default:
+            case 'twilio':
+                $this->twilioSender->send($this->config['sms'], $smsParams);
+                break;
+
+            case 'nexmo':
+                $this->nexmoSender->send($this->config['sms'], $smsParams);
+                break;
+
+            case 'payamakyab':
+                $this->payamakYabSender->send($this->config['sms'], $smsParams);
+                break;
+
+            case 'kavenegar':
+                $this->kaveNegarSender->send($this->config['sms'], $smsParams);
+                break;
+        }
+    }
+
+    protected function sendPush($pushSender, $section, $pushParams): void
+    {
+        switch ($pushSender) {
+            default:
+            case 'fcm':
+                $this->fcmSender->send($this->config['push'][$section], $pushParams);
+                break;
+
+            case 'apns':
+                $this->apnsSender->send($this->config['push'][$section], $pushParams);
+                break;
+        }
     }
 }

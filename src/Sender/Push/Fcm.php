@@ -16,14 +16,12 @@ class Fcm implements PushInterface
         $this->config = $config;
     }
 
-
     public function send($config, $params): void
     {
-        $config    = $config['fcm'];
-        $url       = $config['url'];
-        $token     = $params['device_token'];
-        $serverKey = $config['server_key'];
-
+        $config       = $config['fcm'];
+        $url          = $config['url'];
+        $token        = $params['device_token'];
+        $serverKey    = $config['server_key'];
         $title        = $this->utility($params['title']);
         $in_app_title = $this->utility($params['in_app_title']);
         $body         = $this->utility($params['body']);
@@ -32,11 +30,10 @@ class Fcm implements PushInterface
         $in_app       = $params['in_app'];
         $image_url    = $params['image_url'];
         $event        = $params['event'];
-
-        $aps         = ['mutable-content' => 1];
-        $payload     = ['aps' => $aps];
-        $fcm_options = ['image' => $image_url];
-        $apns        = ['payload' => $payload, 'fcm_options' => $fcm_options];
+        $aps          = ['mutable-content' => 1];
+        $payload      = ['aps' => $aps];
+        $fcm_options  = ['image' => $image_url];
+        $apns         = ['payload' => $payload, 'fcm_options' => $fcm_options];
 
         $notification = [
             'title'             => $title,
@@ -95,11 +92,12 @@ class Fcm implements PushInterface
     private function utility($text): string
     {
         if (isset($this->config['push']['setting'])) {
-            $limitation = $this->config['push']['setting']['limitation'];
-            $xss        = $this->config['push']['setting']['xss'];
-            $text       = $limitation['status'] ? ((strlen($text) > $limitation['length']) ? substr($text, 0, $limitation['length']) . '...' : $text) : $text;
-            $text       = $xss['status'] ? htmlspecialchars($text, ENT_QUOTES, 'UTF-8') : $text;
+            $limit = $this->config['push']['setting']['limitation'];
+            $xss   = $this->config['push']['setting']['xss'];
+            $text  = $limit['status'] ? ((strlen($text) > $limit['length']) ? substr($text, 0, $limit['length']) . '...' : $text) : $text;
+            $text  = $xss['status'] ? htmlspecialchars($text, ENT_QUOTES, 'UTF-8') : $text;
         }
+
         return $text;
     }
 }

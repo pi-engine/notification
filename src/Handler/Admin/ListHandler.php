@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Handler\Api;
+namespace Notification\Handler\Admin;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -34,24 +34,14 @@ class ListHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // Get account
-        $account = $request->getAttribute('account');
-
         // Get request body
         $requestBody = $request->getParsedBody();
 
-        // Set record params
-        $params = [
-            'user_id' => $account['id'],
-            'page'    => $requestBody['page'] ?? 1,
-            'limit'   => $requestBody['limit'] ?? 25,
-            'order'   => (isset($requestBody['order']) && !empty($requestBody['order']))
-                ? [$requestBody['order'], 'id DESC']
-                : ['time_create DESC', 'id DESC'],
-        ];
+        // Set order
+        $requestBody['order'] = $requestBody['order'] ? [$requestBody['order'], 'id DESC'] : ['time_create DESC', 'id DESC'];
 
         // Get list of notifications
-        $result = $this->notificationService->getNotificationList($params);
+        $result = $this->notificationService->getNotificationList($requestBody);
 
         return new JsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
     }

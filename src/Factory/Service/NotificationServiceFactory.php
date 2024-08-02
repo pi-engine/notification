@@ -5,9 +5,14 @@ namespace Notification\Factory\Service;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Repository\NotificationRepositoryInterface;
-use Notification\Sender\Mail\MailInterface;
-use Notification\Sender\Push\PushInterface;
-use Notification\Sender\SMS\SMSInterface;
+use Notification\Sender\Mail\LaminasMail;
+use Notification\Sender\Mail\Mailer;
+use Notification\Sender\Push\Apns;
+use Notification\Sender\Push\Fcm;
+use Notification\Sender\SMS\KaveNegar;
+use Notification\Sender\SMS\Nexmo;
+use Notification\Sender\SMS\PayamakYab;
+use Notification\Sender\SMS\Twilio;
 use Notification\Service\NotificationService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -31,10 +36,15 @@ class NotificationServiceFactory implements FactoryInterface
 
         return new NotificationService(
             $container->get(NotificationRepositoryInterface::class),
-            $container->get(MailInterface::class),
-            $container->get(SMSInterface::class),
-            $container->get(PushInterface::class),
             $container->get(UtilityService::class),
+            $container->get(LaminasMail::class),
+            $container->get(Mailer::class),
+            $container->get(Fcm::class),
+            $container->get(Apns::class),
+            $container->get(Twilio::class),
+            $container->get(Nexmo::class),
+            $container->get(PayamakYab::class),
+            $container->get(KaveNegar::class),
             $config['notification']
         );
     }
