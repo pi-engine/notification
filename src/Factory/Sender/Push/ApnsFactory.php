@@ -18,6 +18,6 @@ class ApnsFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Apns
     {
         $config = $container->get('config');
-        return new Apns($config['notification']);
+        return new Apns($config['notification']['push']['apns']);
     }
 }
