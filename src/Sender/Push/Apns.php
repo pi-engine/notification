@@ -24,8 +24,7 @@ class Apns implements PushInterface
 
     public function send($config, $params): void
     {
-        $deviceToken = 'e01f141712d90e5f6af66f7e4da49e32c3552fb16264bbeb8e7acb665d587ce4';
-
+        $deviceToken = $params['device_token'];
         $authProvider = Token::create([
             'key_id' => $this->config['key_id'],
             'team_id' => $this->config['team_id'],
@@ -34,14 +33,16 @@ class Apns implements PushInterface
             'private_key_secret' => $this->config['private_key_secret'],
         ]);
 
-        $alert = Alert::create()->setTitle('Hello!');
-        $alert = $alert->setBody('First push notification');
+        $alert = Alert::create()->setTitle($this->utility($params['title']));
+        $alert = $alert->setBody($this->utility($params['body']));
 
         $payload = Payload::create()->setAlert($alert)->setPushType('voip');
 
         $payload->setSound('default');
 
-        $payload->setCustomValue('key', 'value');
+        if (isset($params['custom_information'])) {
+            $payload->setCustomValue('custom_information', $params['custom_information']);
+        }
 
         $deviceTokens = [$deviceToken];
 
@@ -54,5 +55,16 @@ class Apns implements PushInterface
         $client->addNotifications($notifications);
         $responses = $client->push();
 
+    }
+
+    private function utility($text): string
+    {
+        if (isset($this->config['setting'])) {
+            $limit = $this->config['setting']['limitation'];
+            $xss   = $this->config['setting']['xss'];
+            $text  = $limit['status'] ? ((strlen($text) > $limit['length']) ? substr($text, 0, $limit['length']) . '...' : $text) : $text;
+            $text  = $xss['status'] ? htmlspecialchars($text, ENT_QUOTES, 'UTF-8') : $text;
+        } 
+        return $text;
     }
 }
