@@ -36,7 +36,7 @@ class Apns implements PushInterface
         $alert = Alert::create()->setTitle($this->utility($params['title']));
         $alert = $alert->setBody($this->utility($params['body']));
 
-        $payload = Payload::create()->setAlert($alert)->setPushType('voip');
+        $payload = Payload::create()->setAlert($alert)->setPushType($params['push_type']);
 
         $payload->setSound('default');
 
