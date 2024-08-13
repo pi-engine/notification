@@ -218,8 +218,6 @@ class NotificationService implements ServiceInterface
             ];
         }
 
-        //
-
         // Set time view
         $notification['time_create_view'] = $this->utilityService->date($notification['time_create']);
         $notification['time_update_view'] = $this->utilityService->date($notification['time_update']);
