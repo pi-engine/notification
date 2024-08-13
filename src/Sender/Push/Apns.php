@@ -36,9 +36,11 @@ class Apns implements PushInterface
         $alert = Alert::create()->setTitle($this->utility($params['title']));
         $alert = $alert->setBody($this->utility($params['body']));
 
-        $payload = Payload::create()->setAlert($alert)->setPushType($params['push_type']);
-
-        $payload->setSound('default');
+        $payload = Payload::create()
+            ->setAlert($alert)
+            ->setPushType($params['push_type'])
+            ->setSound('default')
+            ->setContentAvailability(1);
 
         if (isset($params['custom_information'])) {
             $payload->setCustomValue('custom_information', $params['custom_information']);

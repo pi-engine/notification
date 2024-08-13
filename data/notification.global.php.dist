@@ -32,6 +32,23 @@ return [
         'sms'   => [],
         'push'  => [
             'fcm' => [],
+            'apns'=>[
+                'key_id' => '',
+                'is_production'=>false,
+                'team_id' => '',
+                'app_bundle_id' => '..',
+                'private_key_path' => '/app/config/autoload/...',
+                'private_key_secret' => null,
+                'setting'=>[
+                    'limitation'=>[
+                        'status'=>true,
+                        'length'=>150
+                    ],
+                    'xss'=>[
+                        'status'=>true,
+                    ]
+                ],
+            ]
         ],
         'setting'=>[
             'limitation'=>[
@@ -42,22 +59,5 @@ return [
                 'status'=>true,
             ]
         ],
-        'apns'=>[
-            'key_id' => '',
-            'is_production'=>false,
-            'team_id' => '',
-            'app_bundle_id' => '..',
-            'private_key_path' => '/app/config/autoload/...',
-            'private_key_secret' => null,
-            'setting'=>[
-                'limitation'=>[
-                    'status'=>true,
-                    'length'=>150
-                ],
-                'xss'=>[
-                    'status'=>true,
-                ]
-            ],
-        ]
     ],
 ];
