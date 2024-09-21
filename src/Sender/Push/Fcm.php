@@ -118,7 +118,7 @@ class Fcm implements PushInterface
                 'apns' => [
                     'headers' => [
                         'apns-priority' => '10',  // High priority to wake the app
-                        'apns-push-type' => 'voip',  // VoIP push notification
+                        //'apns-push-type' => 'voip',  // VoIP push notification
                     ],
                     'payload' => [
                         'aps' => [
