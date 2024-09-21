@@ -2,7 +2,7 @@
 
 namespace Notification\Factory\Handler;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Handler\InstallerHandler;
 use Psr\Container\ContainerExceptionInterface;

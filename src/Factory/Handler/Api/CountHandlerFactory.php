@@ -2,7 +2,7 @@
 
 namespace Notification\Factory\Handler\Api;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Handler\Api\CountHandler;
 use Notification\Service\NotificationService;

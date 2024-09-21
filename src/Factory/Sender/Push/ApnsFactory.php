@@ -2,7 +2,7 @@
 
 namespace Notification\Factory\Sender\Push;
 
-use Interop\Container\Containerinterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Sender\Push\Apns;
 

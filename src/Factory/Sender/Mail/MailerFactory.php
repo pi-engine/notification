@@ -2,7 +2,7 @@
 
 namespace Notification\Factory\Sender\Mail;
 
-use Interop\Container\Containerinterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Sender\Mail\Mailer;
 

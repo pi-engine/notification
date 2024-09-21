@@ -2,7 +2,7 @@
 
 namespace Notification\Factory\Handler\Admin;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Handler\Admin\ListHandler;
 use Notification\Service\NotificationService;
