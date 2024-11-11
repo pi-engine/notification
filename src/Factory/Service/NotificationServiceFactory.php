@@ -2,7 +2,6 @@
 
 namespace Notification\Factory\Service;
 
-use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Notification\Repository\NotificationRepositoryInterface;
 use Notification\Sender\Mail\LaminasMail;
@@ -14,9 +13,10 @@ use Notification\Sender\SMS\Nexmo;
 use Notification\Sender\SMS\PayamakYab;
 use Notification\Sender\SMS\Twilio;
 use Notification\Service\NotificationService;
+use Pi\Core\Service\UtilityService;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use User\Service\UtilityService;
 
 class NotificationServiceFactory implements FactoryInterface
 {

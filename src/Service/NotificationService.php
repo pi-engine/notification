@@ -11,7 +11,7 @@ use Notification\Sender\SMS\KaveNegar;
 use Notification\Sender\SMS\Nexmo;
 use Notification\Sender\SMS\PayamakYab;
 use Notification\Sender\SMS\Twilio;
-use User\Service\UtilityService;
+use Pi\Core\Service\UtilityService;
 
 class NotificationService implements ServiceInterface
 {
