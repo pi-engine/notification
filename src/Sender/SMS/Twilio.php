@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Sender\SMS;
+namespace Pi\Notification\Sender\SMS;
 
 class Twilio implements SMSInterface
 {

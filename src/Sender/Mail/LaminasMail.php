@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Sender\Mail;
+namespace Pi\Notification\Sender\Mail;
 
 use Laminas\Mail\Message;
 use Laminas\Mail\Transport\Sendmail;

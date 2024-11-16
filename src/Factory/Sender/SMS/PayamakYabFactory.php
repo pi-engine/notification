@@ -1,10 +1,10 @@
 <?php
 
-namespace Notification\Factory\Sender\SMS;
+namespace Pi\Notification\Factory\Sender\SMS;
 
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Sender\SMS\PayamakYab;
+use Pi\Notification\Sender\SMS\PayamakYab;
 
 class PayamakYabFactory implements FactoryInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Sender\SMS;
+namespace Pi\Notification\Sender\SMS;
 
 class Nexmo implements SMSInterface
 {

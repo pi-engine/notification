@@ -1,11 +1,11 @@
 <?php
 
-namespace Notification\Factory\Handler\Api;
+namespace Pi\Notification\Factory\Handler\Api;
 
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Handler\Api\SendHandler;
-use Notification\Service\NotificationService;
+use Pi\Notification\Handler\Api\SendHandler;
+use Pi\Notification\Service\NotificationService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

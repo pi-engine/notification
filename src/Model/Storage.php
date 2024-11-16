@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Model;
+namespace Pi\Notification\Model;
 
 class Storage
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Sender\SMS;
+namespace Pi\Notification\Sender\SMS;
 
 use Laminas\Soap\Client as LaminasSoapClient;
 

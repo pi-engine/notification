@@ -1,10 +1,10 @@
 <?php
 
-namespace Notification\Factory\Handler;
+namespace Pi\Notification\Factory\Handler;
 
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Handler\InstallerHandler;
 use Pi\Core\Service\InstallerService;
+use Pi\Notification\Handler\InstallerHandler;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

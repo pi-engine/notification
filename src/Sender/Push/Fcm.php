@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Sender\Push;
+namespace Pi\Notification\Sender\Push;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\HttpHandler\HttpHandlerFactory;
 

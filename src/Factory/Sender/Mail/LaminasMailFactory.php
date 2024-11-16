@@ -1,10 +1,10 @@
 <?php
 
-namespace Notification\Factory\Sender\Mail;
+namespace Pi\Notification\Factory\Sender\Mail;
 
-use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Sender\Mail\LaminasMail;
+use Pi\Notification\Sender\Mail\LaminasMail;
+use Psr\Container\ContainerInterface;
 
 class LaminasMailFactory implements FactoryInterface
 {

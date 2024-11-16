@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Service;
+namespace Pi\Notification\Service;
 
 interface ServiceInterface
 {

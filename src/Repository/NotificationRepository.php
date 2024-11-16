@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Repository;
+namespace Pi\Notification\Repository;
 
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\Adapter\Driver\ResultInterface;
@@ -11,7 +11,7 @@ use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Update;
 use Laminas\Hydrator\HydratorInterface;
-use Notification\Model\Storage;
+use Pi\Notification\Model\Storage;
 use RuntimeException;
 
 

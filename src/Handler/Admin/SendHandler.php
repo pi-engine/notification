@@ -1,10 +1,10 @@
 <?php
 
-namespace Notification\Handler\Admin;
+namespace Pi\Notification\Handler\Admin;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\JsonResponse;
-use Notification\Service\NotificationService;
+use Pi\Notification\Service\NotificationService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

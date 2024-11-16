@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Sender\Mail;
+namespace Pi\Notification\Sender\Mail;
 
 interface MailInterface
 {

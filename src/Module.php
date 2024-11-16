@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification;
+namespace Pi\Notification;
 
 use Laminas\Mvc\MvcEvent;
 

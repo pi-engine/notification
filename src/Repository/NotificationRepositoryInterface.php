@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Repository;
+namespace Pi\Notification\Repository;
 
 use Laminas\Db\ResultSet\HydratingResultSet;
 

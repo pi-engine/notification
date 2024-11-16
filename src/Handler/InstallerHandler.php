@@ -1,6 +1,6 @@
 <?php
 
-namespace Notification\Handler;
+namespace Pi\Notification\Handler;
 
 use Laminas\Diactoros\Response\JsonResponse;
 use Pi\Core\Service\InstallerService;

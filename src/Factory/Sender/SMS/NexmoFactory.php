@@ -1,10 +1,10 @@
 <?php
 
-namespace Notification\Factory\Sender\SMS;
+namespace Pi\Notification\Factory\Sender\SMS;
 
-use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Notification\Sender\SMS\Nexmo;
+use Pi\Notification\Sender\SMS\Nexmo;
+use Psr\Container\ContainerInterface;
 
 class NexmoFactory implements FactoryInterface
 {
