@@ -4,7 +4,7 @@ namespace Pi\Notification;
 
 use Laminas\Mvc\Middleware\PipeSpec;
 use Laminas\Router\Http\Literal;
-use Logger\Middleware\LoggerRequestResponseMiddleware;
+use Pi\Logger\Middleware\LoggerRequestResponseMiddleware;
 use Pi\Core\Middleware\InstallerMiddleware;
 use Pi\Core\Middleware\RequestPreparationMiddleware;
 use Pi\Core\Middleware\SecurityMiddleware;
