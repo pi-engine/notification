@@ -3,7 +3,7 @@
 namespace Pi\Notification\Handler\Api;
 
 use Fig\Http\Message\StatusCodeInterface;
-use Laminas\Diactoros\Response\JsonResponse;
+use Pi\Core\Response\EscapingJsonResponse;
 use Pi\Notification\Service\NotificationService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -53,6 +53,6 @@ class ListHandler implements RequestHandlerInterface
         // Get list of notifications
         $result = $this->notificationService->getNotificationList($params);
 
-        return new JsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
+        return new EscapingJsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
     }
 }
