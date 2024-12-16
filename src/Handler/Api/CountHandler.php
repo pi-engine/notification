@@ -24,8 +24,8 @@ class CountHandler implements RequestHandlerInterface
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory,
-        NotificationService $notificationService
+        StreamFactoryInterface   $streamFactory,
+        NotificationService      $notificationService
     ) {
         $this->responseFactory     = $responseFactory;
         $this->streamFactory       = $streamFactory;
@@ -43,7 +43,7 @@ class CountHandler implements RequestHandlerInterface
         ];
 
         // Get list of notifications
-        $result = $this->notificationService->getNotViewedCount($params);
+        $result = $this->notificationService->getNotCount($params);
 
         return new EscapingJsonResponse($result, $result['status'] ?? StatusCodeInterface::STATUS_OK);
     }

@@ -2,6 +2,4 @@
 
 namespace Pi\Notification\Service;
 
-interface ServiceInterface
-{
-}
+interface ServiceInterface {}

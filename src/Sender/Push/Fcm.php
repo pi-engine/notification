@@ -1,6 +1,7 @@
 <?php
 
 namespace Pi\Notification\Sender\Push;
+
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\HttpHandler\HttpHandlerFactory;
 
@@ -69,7 +70,6 @@ class Fcm implements PushInterface
         //$json      = json_encode($arrayToSend);
 
 
-
         // Path to your downloaded service account JSON file
         $jsonKeyFilePath = $this->config['push']['fcm']['key_file_path'];
 
@@ -89,7 +89,7 @@ class Fcm implements PushInterface
 
         // Fetch the OAuth 2 access token
         $accessTokenArray = $credentials->fetchAuthToken($httpHandler);
-        $accessToken = $accessTokenArray['access_token'];
+        $accessToken      = $accessTokenArray['access_token'];
 
 
         $headers = [
@@ -99,57 +99,57 @@ class Fcm implements PushInterface
 
         $arrayToSend = [
             'message' => [
-                'token' => $params['device_token'], // Device token for Android/iOS
+                'token'        => $params['device_token'], // Device token for Android/iOS
                 'notification' => [
                     'title' => $this->utility($params['title']),
-                    'body' => $this->utility($params['body']),
+                    'body'  => $this->utility($params['body']),
                     'image' => $params['image_url'],
                 ],
-                'data' => [
-                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-                    'type' => $params['type'],
-                    'in_app_title' => $this->utility($params['in_app_title']),
-                    'in_app_body' => $this->utility($params['body']),
-                    'in_app' => (string)$params['in_app'],
-                    'event' => $params['event'],
-                    'image_url' => $params['image_url'],
+                'data'         => [
+                    'click_action'       => 'FLUTTER_NOTIFICATION_CLICK',
+                    'type'               => $params['type'],
+                    'in_app_title'       => $this->utility($params['in_app_title']),
+                    'in_app_body'        => $this->utility($params['body']),
+                    'in_app'             => (string)$params['in_app'],
+                    'event'              => $params['event'],
+                    'image_url'          => $params['image_url'],
                     'custom_information' => json_encode($params['custom_information']) ?? null,
                 ],
-                'apns' => [
-                    'headers' => [
+                'apns'         => [
+                    'headers'     => [
                         'apns-priority' => '10',  // High priority to wake the app
                         //'apns-push-type' => 'voip',  // VoIP push notification
                     ],
-                    'payload' => [
+                    'payload'     => [
                         'aps' => [
                             'content-available' => 1,  // Silent push to wake the app
-                            'sound' => 'default',  // Optional sound for call notification
-                            'mutable-content' => 1,  // For media
+                            'sound'             => 'default',  // Optional sound for call notification
+                            'mutable-content'   => 1,  // For media
                         ],
                     ],
                     'fcm_options' => [
                         'image' => $params['image_url'],  // Optional image URL for call notification
-                    ]
+                    ],
                 ],
-                'android' => [
-                    'priority' => 'high',
+                'android'      => [
+                    'priority'     => 'high',
                     'notification' => [
                         'title' => $this->utility($params['title']),
-                        'body' => $this->utility($params['body']),
-                        'icon' => 'default',  // Set a default icon
+                        'body'  => $this->utility($params['body']),
+                        'icon'  => 'default',  // Set a default icon
                         'image' => $params['image_url'],
                         'sound' => 'default',
                     ],
-                    'data' => [
-                        'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-                        'type' => $params['type'],
-                        'event' => $params['event'],
-                        'in_app_title' => $this->utility($params['in_app_title']),
-                        'in_app_body' => $this->utility($params['body']),
+                    'data'         => [
+                        'click_action'       => 'FLUTTER_NOTIFICATION_CLICK',
+                        'type'               => $params['type'],
+                        'event'              => $params['event'],
+                        'in_app_title'       => $this->utility($params['in_app_title']),
+                        'in_app_body'        => $this->utility($params['body']),
                         'custom_information' => json_encode($params['custom_information']) ?? null,
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ];
 
 

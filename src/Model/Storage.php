@@ -30,17 +30,17 @@ class Storage
      * @param mixed  $id
      */
     public function __construct(
-        int $company_id,
-        int $sender_id,
-        int $receiver_id,
-        int $status,
-        int $viewed,
-        int $sent,
-        int $time_create,
-        int $time_update,
+        int    $company_id,
+        int    $sender_id,
+        int    $receiver_id,
+        int    $status,
+        int    $viewed,
+        int    $sent,
+        int    $time_create,
+        int    $time_update,
         string $type,
         string $information,
-        mixed $id
+        mixed  $id
     ) {
         $this->id          = $id;
         $this->company_id  = $company_id;

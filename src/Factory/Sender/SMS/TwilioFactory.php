@@ -2,9 +2,9 @@
 
 namespace Pi\Notification\Factory\Sender\SMS;
 
-use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Pi\Notification\Sender\SMS\Twilio;
+use Psr\Container\ContainerInterface;
 
 class TwilioFactory implements FactoryInterface
 {

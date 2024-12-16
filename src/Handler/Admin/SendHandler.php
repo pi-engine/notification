@@ -24,8 +24,8 @@ class SendHandler implements RequestHandlerInterface
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
-        StreamFactoryInterface $streamFactory,
-        NotificationService $notificationService
+        StreamFactoryInterface   $streamFactory,
+        NotificationService      $notificationService
     ) {
         $this->responseFactory     = $responseFactory;
         $this->streamFactory       = $streamFactory;

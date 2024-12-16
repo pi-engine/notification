@@ -53,16 +53,16 @@ class NotificationService implements ServiceInterface
      */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
-        UtilityService $utilityService,
-        LaminasMail $laminasMailSender,
-        Mailer $mailerSender,
-        Fcm $fcmSender,
-        Apns $apnsSender,
-        Twilio $twilioSender,
-        Nexmo $nexmoSender,
-        PayamakYab $payamakYabSender,
-        KaveNegar $kaveNegarSender,
-        $config
+        UtilityService                  $utilityService,
+        LaminasMail                     $laminasMailSender,
+        Mailer                          $mailerSender,
+        Fcm                             $fcmSender,
+        Apns                            $apnsSender,
+        Twilio                          $twilioSender,
+        Nexmo                           $nexmoSender,
+        PayamakYab                      $payamakYabSender,
+        KaveNegar                       $kaveNegarSender,
+                                        $config
     ) {
         $this->notificationRepository = $notificationRepository;
         $this->utilityService         = $utilityService;
@@ -144,21 +144,25 @@ class NotificationService implements ServiceInterface
      *
      * @return int
      */
-    public function getNotViewedCount($params): array
+    public function getNotCount($params): array
     {
         return [
             'result' => true,
             'data'   => [
-                'count'  => $this->notificationRepository->getNotificationCount([
-                    'user_id' => $params['user_id'],
-                    'status'  => 1,
-                ]),
-                'unread' => $this->notificationRepository->getUnreadNotificationCount([
-                    'user_id' => $params['user_id'],
-                    'status'  => 1,
-                ]),
+                'count'  => $this->notificationRepository->getNotificationCount(
+                    [
+                        'user_id' => $params['user_id'],
+                        'status'  => 1,
+                    ]
+                ),
+                'unread' => $this->notificationRepository->getUnreadNotificationCount(
+                    [
+                        'user_id' => $params['user_id'],
+                        'status'  => 1,
+                    ]
+                ),
             ],
-            'error'  => new \stdClass(),
+            'error'  => [],
         ];
     }
 

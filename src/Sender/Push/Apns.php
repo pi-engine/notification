@@ -24,12 +24,12 @@ class Apns implements PushInterface
 
     public function send($config, $params): void
     {
-        $deviceToken = $params['device_token'];
+        $deviceToken  = $params['device_token'];
         $authProvider = Token::create([
-            'key_id' => $this->config['key_id'],
-            'team_id' => $this->config['team_id'],
-            'app_bundle_id' =>$this->config['app_bundle_id'],
-            'private_key_path' => $this->config['private_key_path'],
+            'key_id'             => $this->config['key_id'],
+            'team_id'            => $this->config['team_id'],
+            'app_bundle_id'      => $this->config['app_bundle_id'],
+            'private_key_path'   => $this->config['private_key_path'],
             'private_key_secret' => $this->config['private_key_secret'],
         ]);
 
@@ -50,7 +50,7 @@ class Apns implements PushInterface
 
         $notifications = [];
         foreach ($deviceTokens as $deviceToken) {
-            $notifications[] = new Notification($payload,$deviceToken);
+            $notifications[] = new Notification($payload, $deviceToken);
         }
 
         $client = new Client($authProvider, $production = $this->config['is_production']);
@@ -66,7 +66,7 @@ class Apns implements PushInterface
             $xss   = $this->config['setting']['xss'];
             $text  = $limit['status'] ? ((strlen($text) > $limit['length']) ? substr($text, 0, $limit['length']) . '...' : $text) : $text;
             $text  = $xss['status'] ? htmlspecialchars($text, ENT_QUOTES, 'UTF-8') : $text;
-        } 
+        }
         return $text;
     }
 }
