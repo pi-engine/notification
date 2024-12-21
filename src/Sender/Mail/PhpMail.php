@@ -5,7 +5,7 @@ namespace Pi\Notification\Sender\Mail;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-class Mailer implements MailInterface
+class PhpMail implements MailInterface
 {
     /**
      * @throws Exception
@@ -19,12 +19,12 @@ class Mailer implements MailInterface
                 break;
 
             case 'ENCRYPTION_SMTPS':
-                $SMTPSecure = PhpMailer::ENCRYPTION_SMTPS;
+                $SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 break;
         }
 
         //Create an instance; passing `true` enables exceptions
-        $mail = new PhpMailer(true);
+        $mail = new PHPMailer(true);
 
         //Server settings
         $mail->isSMTP();

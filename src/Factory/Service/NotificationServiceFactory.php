@@ -6,7 +6,8 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Pi\Core\Service\UtilityService;
 use Pi\Notification\Repository\NotificationRepositoryInterface;
 use Pi\Notification\Sender\Mail\LaminasMail;
-use Pi\Notification\Sender\Mail\Mailer;
+use Pi\Notification\Sender\Mail\PhpMail;
+use Pi\Notification\Sender\Mail\SymfonyMail;
 use Pi\Notification\Sender\Push\Apns;
 use Pi\Notification\Sender\Push\Fcm;
 use Pi\Notification\Sender\SMS\KaveNegar;
@@ -38,7 +39,8 @@ class NotificationServiceFactory implements FactoryInterface
             $container->get(NotificationRepositoryInterface::class),
             $container->get(UtilityService::class),
             $container->get(LaminasMail::class),
-            $container->get(Mailer::class),
+            $container->get(SymfonyMail::class),
+            $container->get(PhpMail::class),
             $container->get(Fcm::class),
             $container->get(Apns::class),
             $container->get(Twilio::class),

@@ -3,20 +3,20 @@
 namespace Pi\Notification\Factory\Sender\Mail;
 
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Pi\Notification\Sender\Mail\Mailer;
+use Pi\Notification\Sender\Mail\SymfonyMail;
 use Psr\Container\ContainerInterface;
 
-class MailerFactory implements FactoryInterface
+class SymfonyMailFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param string             $requestedName
      * @param null|array         $options
      *
-     * @return Mailer
+     * @return SymfonyMail
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Mailer
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SymfonyMail
     {
-        return new Mailer();
+        return new SymfonyMail();
     }
 }

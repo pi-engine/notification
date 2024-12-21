@@ -2,16 +2,19 @@
 
 namespace Pi\Notification\Service;
 
+use PHPMailer\PHPMailer\Exception;
 use Pi\Core\Service\UtilityService;
 use Pi\Notification\Repository\NotificationRepositoryInterface;
 use Pi\Notification\Sender\Mail\LaminasMail;
-use Pi\Notification\Sender\Mail\Mailer;
+use Pi\Notification\Sender\Mail\PhpMail;
+use Pi\Notification\Sender\Mail\SymfonyMail;
 use Pi\Notification\Sender\Push\Apns;
 use Pi\Notification\Sender\Push\Fcm;
 use Pi\Notification\Sender\SMS\KaveNegar;
 use Pi\Notification\Sender\SMS\Nexmo;
 use Pi\Notification\Sender\SMS\PayamakYab;
 use Pi\Notification\Sender\SMS\Twilio;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class NotificationService implements ServiceInterface
 {
@@ -24,8 +27,11 @@ class NotificationService implements ServiceInterface
     /** @var LaminasMail */
     protected LaminasMail $laminasMailSender;
 
-    /** @var Mailer */
-    protected Mailer $mailerSender;
+    /** @var SymfonyMail */
+    protected SymfonyMail $symfonyMailSender;
+
+    /** @var PhpMail */
+    protected PhpMail $mailerSender;
 
     /** @var Fcm */
     protected Fcm $fcmSender;
@@ -48,14 +54,35 @@ class NotificationService implements ServiceInterface
     /* @var array */
     protected array $config;
 
+    /* @var string */
+    private string $mailSender = 'phpMailer';
+
+    /* @var string */
+    private string $smsSender = 'twilio';
+
+    /* @var string */
+    private string $pushSender = 'fcm';
+
     /**
      * @param NotificationRepositoryInterface $notificationRepository
+     * @param UtilityService                  $utilityService
+     * @param LaminasMail                     $laminasMailSender
+     * @param SymfonyMail                     $symfonyMailSender
+     * @param PhpMail                         $mailerSender
+     * @param Fcm                             $fcmSender
+     * @param Apns                            $apnsSender
+     * @param Twilio                          $twilioSender
+     * @param Nexmo                           $nexmoSender
+     * @param PayamakYab                      $payamakYabSender
+     * @param KaveNegar                       $kaveNegarSender
+     * @param                                 $config
      */
     public function __construct(
         NotificationRepositoryInterface $notificationRepository,
         UtilityService                  $utilityService,
         LaminasMail                     $laminasMailSender,
-        Mailer                          $mailerSender,
+        SymfonyMail                     $symfonyMailSender,
+        PhpMail                         $mailerSender,
         Fcm                             $fcmSender,
         Apns                            $apnsSender,
         Twilio                          $twilioSender,
@@ -67,6 +94,7 @@ class NotificationService implements ServiceInterface
         $this->notificationRepository = $notificationRepository;
         $this->utilityService         = $utilityService;
         $this->laminasMailSender      = $laminasMailSender;
+        $this->symfonyMailSender      = $symfonyMailSender;
         $this->mailerSender           = $mailerSender;
         $this->fcmSender              = $fcmSender;
         $this->apnsSender             = $apnsSender;
@@ -237,28 +265,32 @@ class NotificationService implements ServiceInterface
     }
 
     /**
-     * @param $params
+     * @param        $params
+     * @param string $section
+     *
+     * @throws Exception
+     * @throws TransportExceptionInterface
      */
-    public function send($params, $section = 'customer'): void
+    public function send($params, string $section = 'customer'): void
     {
         // Set sender
-        $mailSender = $params['mail_sender'] ?? 'mailer';
-        $smsSender   = $params['sms_sender'] ?? 'twilio';
-        $pushSender  = $params['push_sender'] ?? 'fcm';
+        $this->mailSender = $params['mail_sender'] ?? $this->config['defaults']['mail'];
+        $this->smsSender   = $params['sms_sender'] ?? $this->config['defaults']['sms'];
+        $this->pushSender  = $params['push_sender'] ?? $this->config['defaults']['push'];
 
         // Send a mail notification
         if (isset($params['mail']) && !empty($params['mail'])) {
-            //$this->sendMail($mailSender, $params['mail']);
+            $this->sendMail($params['mail']);
         }
 
         // Send a sms notification
         if (isset($params['sms']) && !empty($params['sms'])) {
-            $this->sendSms($smsSender, $params['sms']);
+            $this->sendSms($params['sms']);
         }
 
         // Send a push notification
         if (isset($params['push']) && !empty($params['push'])) {
-            $this->sendPush($pushSender, $section, $params['push']);
+            $this->sendPush($section, $params['push']);
         }
 
         // Save to DB
@@ -287,6 +319,9 @@ class NotificationService implements ServiceInterface
 
     /**
      * @param $params
+     *
+     * @return array
+     * @throws Exception
      */
     public function middleSend($params): array
     {
@@ -326,23 +361,31 @@ class NotificationService implements ServiceInterface
         $this->notificationRepository->updateNotification($params);
     }
 
-    protected function sendMail($mailSender, $mailParams): void
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    protected function sendMail($mailParams): void
     {
-        switch ($mailSender) {
+        switch ($this->mailSender) {
             default:
-            case 'mailer':
+            case 'phpMailer':
                 $this->mailerSender->send($this->config['mail'], $mailParams);
                 break;
 
             case 'laminasMail':
                 $this->laminasMailSender->send($this->config['mail'], $mailParams);
                 break;
+
+            case 'symfonyMail':
+                $this->symfonyMailSender->send($this->config['mail'], $mailParams);
+                break;
         }
     }
 
-    protected function sendSms($smsSender, $smsParams): void
+    protected function sendSms($smsParams): void
     {
-        switch ($smsSender) {
+        switch ($this->smsSender) {
             default:
             case 'twilio':
                 $this->twilioSender->send($this->config['sms'], $smsParams);
@@ -362,9 +405,9 @@ class NotificationService implements ServiceInterface
         }
     }
 
-    protected function sendPush($pushSender, $section, $pushParams): void
+    protected function sendPush($section, $pushParams): void
     {
-        switch ($pushSender) {
+        switch ($this->pushSender) {
             default:
             case 'fcm':
                 $this->fcmSender->send($this->config['push'][$section], $pushParams);

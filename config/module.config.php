@@ -4,10 +4,10 @@ namespace Pi\Notification;
 
 use Laminas\Mvc\Middleware\PipeSpec;
 use Laminas\Router\Http\Literal;
-use Pi\Logger\Middleware\LoggerRequestResponseMiddleware;
 use Pi\Core\Middleware\InstallerMiddleware;
 use Pi\Core\Middleware\RequestPreparationMiddleware;
 use Pi\Core\Middleware\SecurityMiddleware;
+use Pi\Logger\Middleware\LoggerRequestResponseMiddleware;
 use Pi\User\Middleware\AuthenticationMiddleware;
 use Pi\User\Middleware\AuthorizationMiddleware;
 
@@ -25,7 +25,8 @@ return [
             Handler\Api\UpdateHandler::class         => Factory\Handler\Api\UpdateHandlerFactory::class,
             Handler\Api\CountHandler::class          => Factory\Handler\Api\CountHandlerFactory::class,
             Sender\Mail\LaminasMail::class           => Factory\Sender\Mail\LaminasMailFactory::class,
-            Sender\Mail\Mailer::class                => Factory\Sender\Mail\MailerFactory::class,
+            Sender\Mail\SymfonyMail::class           => Factory\Sender\Mail\SymfonyMailFactory::class,
+            Sender\Mail\PhpMail::class               => Factory\Sender\Mail\PhpMailFactory::class,
             Sender\SMS\Twilio::class                 => Factory\Sender\SMS\TwilioFactory::class,
             Sender\SMS\Nexmo::class                  => Factory\Sender\SMS\NexmoFactory::class,
             Sender\SMS\PayamakYab::class             => Factory\Sender\SMS\PayamakYabFactory::class,
