@@ -2,7 +2,7 @@
 
 return [
     'notification' => [
-        'email' => [
+        'mail' => [
             'laminas'   => [
                 'encoding' => 'utf-8',
                 'from'     => [

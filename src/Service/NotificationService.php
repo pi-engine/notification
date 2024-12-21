@@ -242,13 +242,13 @@ class NotificationService implements ServiceInterface
     public function send($params, $section = 'customer'): void
     {
         // Set sender
-        $emailSender = $params['email_sender'] ?? 'mailer';
+        $mailSender = $params['mail_sender'] ?? 'mailer';
         $smsSender   = $params['sms_sender'] ?? 'twilio';
         $pushSender  = $params['push_sender'] ?? 'fcm';
 
         // Send a mail notification
-        if (isset($params['email']) && !empty($params['email'])) {
-            $this->sendEmail($emailSender, $params['email']);
+        if (isset($params['mail']) && !empty($params['mail'])) {
+            //$this->sendMail($mailSender, $params['mail']);
         }
 
         // Send a sms notification
@@ -326,16 +326,16 @@ class NotificationService implements ServiceInterface
         $this->notificationRepository->updateNotification($params);
     }
 
-    protected function sendEmail($emailSender, $emailParams): void
+    protected function sendMail($mailSender, $mailParams): void
     {
-        switch ($emailSender) {
+        switch ($mailSender) {
             default:
             case 'mailer':
-                $this->mailerSender->send($this->config['email'], $emailParams);
+                $this->mailerSender->send($this->config['mail'], $mailParams);
                 break;
 
             case 'laminasMail':
-                $this->laminasMailSender->send($this->config['email'], $emailParams);
+                $this->laminasMailSender->send($this->config['mail'], $mailParams);
                 break;
         }
     }
