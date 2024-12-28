@@ -4,6 +4,7 @@ namespace Pi\Notification;
 
 use Laminas\Mvc\Middleware\PipeSpec;
 use Laminas\Router\Http\Literal;
+use Pi\Core\Middleware\ErrorMiddleware;
 use Pi\Core\Middleware\InstallerMiddleware;
 use Pi\Core\Middleware\RequestPreparationMiddleware;
 use Pi\Core\Middleware\SecurityMiddleware;
@@ -62,6 +63,7 @@ return [
                                     RequestPreparationMiddleware::class,
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
+                                    ErrorMiddleware::class,
                                     Handler\Api\CountHandler::class
                                 ),
                             ],
@@ -84,6 +86,7 @@ return [
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     LoggerRequestResponseMiddleware::class,
+                                    ErrorMiddleware::class,
                                     Handler\Api\ListHandler::class
                                 ),
                             ],
@@ -106,6 +109,7 @@ return [
                                     SecurityMiddleware::class,
                                     AuthenticationMiddleware::class,
                                     LoggerRequestResponseMiddleware::class,
+                                    ErrorMiddleware::class,
                                     Handler\Api\UpdateHandler::class
                                 ),
                             ],
@@ -139,6 +143,7 @@ return [
                                     AuthenticationMiddleware::class,
                                     AuthorizationMiddleware::class,
                                     LoggerRequestResponseMiddleware::class,
+                                    ErrorMiddleware::class,
                                     Handler\Admin\ListHandler::class
                                 ),
                             ],
@@ -162,6 +167,7 @@ return [
                                     AuthenticationMiddleware::class,
                                     AuthorizationMiddleware::class,
                                     LoggerRequestResponseMiddleware::class,
+                                    ErrorMiddleware::class,
                                     Handler\Admin\SendHandler::class
                                 ),
                             ],
