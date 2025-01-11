@@ -195,18 +195,16 @@ class NotificationService implements ServiceInterface
     }
 
     /**
-     * @param $params
+     * @param $notification
      */
-    public function updateView($params): void
+    public function updateView($notification): void
     {
         // Set params
         $updateParams = [
-            'id'      => $params['id'],
-            'user_id' => $params['user_id'],
             'viewed'  => 1,
         ];
 
-        $this->notificationRepository->updateNotification($updateParams);
+        $this->notificationRepository->updateNotification((int)$notification['id'], $updateParams);
     }
 
     /**
@@ -351,14 +349,6 @@ class NotificationService implements ServiceInterface
         return [
             'result' => true,
         ];
-    }
-
-    /**
-     * @param $params
-     */
-    public function middleUpdate($params): void
-    {
-        $this->notificationRepository->updateNotification($params);
     }
 
     /**

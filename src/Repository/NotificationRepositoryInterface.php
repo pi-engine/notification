@@ -16,7 +16,7 @@ interface NotificationRepositoryInterface
 
     public function getNotification($parameter, $type = 'id'): object|array;
 
-    public function updateNotification(array $params): object|array;
+    public function updateNotification(int $notificationId, array $params): object|array;
 
     public function deleteNotification(array $params): void;
 }

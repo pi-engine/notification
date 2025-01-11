@@ -34,20 +34,11 @@ class UpdateHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // Get account
-        $account = $request->getAttribute('account');
-
-        // Get request body
-        $requestBody = $request->getParsedBody();
-
-        $params = [
-            'receiver_id' => $account['id'],
-            'id'          => $requestBody['id'],
-            'viewed'      => 1,
-        ];
+        // Get notification
+        $notification = $request->getAttribute('notification_item');
 
         // Update notification
-        $this->notificationService->middleUpdate($params);
+        $this->notificationService->updateView($notification);
 
         // Set result
         $result = [

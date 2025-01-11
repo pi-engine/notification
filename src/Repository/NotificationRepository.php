@@ -94,7 +94,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         // Set where
         $columns = ['count' => new Expression('count(*)')];
-        $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
+        $where   = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
         if (isset($params['status']) && !empty($params['status'])) {
             $where['status'] = $params['status'];
         }
@@ -125,7 +125,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         // Set where
         $columns = ['count' => new Expression('count(*)')];
-        $where = [
+        $where   = [
             'viewed' => 0,
         ];
         if (isset($params['user_id']) && !empty($params['user_id'])) {
@@ -212,16 +212,11 @@ class NotificationRepository implements NotificationRepositoryInterface
      *
      * @return array|object
      */
-    public function updateNotification(array $params): object|array
+    public function updateNotification(int $notificationId, array $params): object|array
     {
         $update = new Update($this->tableNotification);
         $update->set($params);
-        $update->where(
-            [
-                'id'          => $params['id'],
-                'receiver_id' => $params['receiver_id'],
-            ]
-        );
+        $update->where(['id' => $notificationId]);
 
         $sql       = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($update);
