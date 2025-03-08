@@ -8,14 +8,11 @@ class KaveNegar implements SMSInterface
 {
     public function send($config, $params): void
     {
-        // Set config
-        $config = $config['kave_negar'];
-
         // Set SMS params
         $smsParams = [
-            'userName' => $config['username'],
-            'password' => $config['password'],
-            'sender'   => $config['number'],
+            'userName' => $config['kave_negar']['username'],
+            'password' => $config['kave_negar']['password'],
+            'sender'   => $config['kave_negar']['number'],
             'receptor' => [str_replace('+98', '0', $params['mobile'])],
             'message'  => $params['message'],
             'unixdate' => 0,
@@ -24,7 +21,7 @@ class KaveNegar implements SMSInterface
         ];
 
         // Send SMS
-        $client = new LaminasSoapClient($config['url']);
+        $client = new LaminasSoapClient($config['kave_negar']['url']);
         $client->SendSimpleByLoginInfo($smsParams)->status;
     }
 }

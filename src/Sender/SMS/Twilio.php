@@ -16,10 +16,10 @@ class Twilio implements SMSInterface
     {
         $client = new Client($config['twilio']['sid'], $config['twilio']['token']);
         $client->messages->create(
-            $params['to'],
+            $params['mobile'],
             [
                 'from' => $config['twilio']['number'],
-                'body' => sprintf('Your OTP code is: %s', $params['code']),
+                'body' => $params['message'],
             ]
         );
     }

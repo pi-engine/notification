@@ -8,14 +8,11 @@ class PayamakYab implements SMSInterface
 {
     public function send($config, $params): void
     {
-        // Set config
-        $config = $config['payamakYab'][$params['source']] ?? $config['payamakYab'];
-
         // Set SMS params
         $smsParams = [
-            'username' => $config['username'],
-            'password' => $config['password'],
-            'from'     => $config['number'],
+            'username' => $config['payamakyab']['username'],
+            'password' => $config['payamakyab']['password'],
+            'from'     => $config['payamakyab']['number'],
             'to'       => [str_replace('+98', '', $params['mobile'])],
             'text'     => $params['message'],
             'isflash'  => false,
@@ -25,7 +22,7 @@ class PayamakYab implements SMSInterface
         ];
 
         // Send SMS
-        $client = new LaminasSoapClient($config['url']);
+        $client = new LaminasSoapClient($config['payamakyab']['url']);
         $client->SendSms($smsParams)->SendSmsResult;
     }
 }
