@@ -30,7 +30,6 @@ return [
             Sender\Mail\SymfonyMail::class                 => Factory\Sender\Mail\SymfonyMailFactory::class,
             Sender\Mail\PhpMail::class                     => Factory\Sender\Mail\PhpMailFactory::class,
             Sender\SMS\Twilio::class                       => Factory\Sender\SMS\TwilioFactory::class,
-            Sender\SMS\Nexmo::class                        => Factory\Sender\SMS\NexmoFactory::class,
             Sender\SMS\PayamakYab::class                   => Factory\Sender\SMS\PayamakYabFactory::class,
             Sender\SMS\KaveNegar::class                    => Factory\Sender\SMS\KaveNegarFactory::class,
             Sender\Push\Fcm::class                         => Factory\Sender\Push\FcmFactory::class,

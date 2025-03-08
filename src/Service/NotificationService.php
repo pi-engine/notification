@@ -11,7 +11,6 @@ use Pi\Notification\Sender\Mail\SymfonyMail;
 use Pi\Notification\Sender\Push\Apns;
 use Pi\Notification\Sender\Push\Fcm;
 use Pi\Notification\Sender\SMS\KaveNegar;
-use Pi\Notification\Sender\SMS\Nexmo;
 use Pi\Notification\Sender\SMS\PayamakYab;
 use Pi\Notification\Sender\SMS\Twilio;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -42,9 +41,6 @@ class NotificationService implements ServiceInterface
     /** @var Twilio */
     protected Twilio $twilioSender;
 
-    /** @var Nexmo */
-    protected Nexmo $nexmoSender;
-
     /** @var PayamakYab */
     protected PayamakYab $payamakYabSender;
 
@@ -72,7 +68,6 @@ class NotificationService implements ServiceInterface
      * @param Fcm                             $fcmSender
      * @param Apns                            $apnsSender
      * @param Twilio                          $twilioSender
-     * @param Nexmo                           $nexmoSender
      * @param PayamakYab                      $payamakYabSender
      * @param KaveNegar                       $kaveNegarSender
      * @param                                 $config
@@ -86,7 +81,6 @@ class NotificationService implements ServiceInterface
         Fcm                             $fcmSender,
         Apns                            $apnsSender,
         Twilio                          $twilioSender,
-        Nexmo                           $nexmoSender,
         PayamakYab                      $payamakYabSender,
         KaveNegar                       $kaveNegarSender,
                                         $config
@@ -99,7 +93,6 @@ class NotificationService implements ServiceInterface
         $this->fcmSender              = $fcmSender;
         $this->apnsSender             = $apnsSender;
         $this->twilioSender           = $twilioSender;
-        $this->nexmoSender            = $nexmoSender;
         $this->payamakYabSender       = $payamakYabSender;
         $this->kaveNegarSender        = $kaveNegarSender;
         $this->config                 = $config;
@@ -379,10 +372,6 @@ class NotificationService implements ServiceInterface
             default:
             case 'twilio':
                 $this->twilioSender->send($this->config['sms'], $smsParams);
-                break;
-
-            case 'nexmo':
-                $this->nexmoSender->send($this->config['sms'], $smsParams);
                 break;
 
             case 'payamakyab':

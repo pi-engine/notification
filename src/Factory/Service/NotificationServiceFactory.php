@@ -11,7 +11,6 @@ use Pi\Notification\Sender\Mail\SymfonyMail;
 use Pi\Notification\Sender\Push\Apns;
 use Pi\Notification\Sender\Push\Fcm;
 use Pi\Notification\Sender\SMS\KaveNegar;
-use Pi\Notification\Sender\SMS\Nexmo;
 use Pi\Notification\Sender\SMS\PayamakYab;
 use Pi\Notification\Sender\SMS\Twilio;
 use Pi\Notification\Service\NotificationService;
@@ -44,7 +43,6 @@ class NotificationServiceFactory implements FactoryInterface
             $container->get(Fcm::class),
             $container->get(Apns::class),
             $container->get(Twilio::class),
-            $container->get(Nexmo::class),
             $container->get(PayamakYab::class),
             $container->get(KaveNegar::class),
             $config['notification']
