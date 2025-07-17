@@ -194,7 +194,7 @@ class NotificationService implements ServiceInterface
     {
         // Set params
         $updateParams = [
-            'viewed'  => 1,
+            'viewed' => 1,
         ];
 
         $this->notificationRepository->updateNotification((int)$notification['id'], $updateParams);
@@ -266,8 +266,8 @@ class NotificationService implements ServiceInterface
     {
         // Set sender
         $this->mailSender = $params['mail_sender'] ?? $this->config['defaults']['mail'];
-        $this->smsSender   = $params['sms_sender'] ?? $this->config['defaults']['sms'];
-        $this->pushSender  = $params['push_sender'] ?? $this->config['defaults']['push'];
+        $this->smsSender  = $params['sms_sender'] ?? $this->config['defaults']['sms'];
+        $this->pushSender = $params['push_sender'] ?? $this->config['defaults']['push'];
 
         // Send a mail notification
         if (isset($params['mail']) && !empty($params['mail'])) {

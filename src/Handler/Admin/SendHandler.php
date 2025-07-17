@@ -35,7 +35,7 @@ class SendHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // Get request
-        $requestBody    = $request->getParsedBody();
+        $requestBody = $request->getParsedBody();
 
         // Send notification
         $this->notificationService->send($requestBody);

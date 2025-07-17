@@ -25,7 +25,7 @@ return [
             ],
         ],
     ],
-    'api' => [
+    'api'   => [
         [
             'title'       => 'Notification count',
             'module'      => 'notification',
