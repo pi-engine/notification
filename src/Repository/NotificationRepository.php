@@ -10,6 +10,7 @@ use Laminas\Db\Sql\Insert;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Update;
+use Laminas\Db\Sql\Where;
 use Laminas\Hydrator\HydratorInterface;
 use Pi\Notification\Model\Storage;
 use RuntimeException;
@@ -56,18 +57,19 @@ class NotificationRepository implements NotificationRepositoryInterface
      */
     public function getNotificationList(array $params = []): HydratingResultSet|array
     {
-        $where = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
-        if (isset($params['status']) && !empty($params['status'])) {
-            $where['status'] = $params['status'];
+        $where = new Where();
+        $where->nest()->equalTo('receiver_id', $params['user_id'])->or->equalTo('type', 'global')->unnest();
+        if (!empty($params['status'])) {
+            $where->equalTo('status', $params['status']);
         }
-        if (isset($params['viewed']) && !empty($params['viewed'])) {
-            $where['viewed'] = $params['viewed'];
+        if (!empty($params['viewed'])) {
+            $where->equalTo('viewed', $params['viewed']);
         }
-        if (isset($params['sent']) && !empty($params['sent'])) {
-            $where['sent'] = $params['sent'];
+        if (!empty($params['sent'])) {
+            $where->equalTo('sent', $params['sent']);
         }
-        if (isset($params['id']) && !empty($params['id'])) {
-            $where['id'] = $params['id'];
+        if (!empty($params['id'])) {
+            $where->equalTo('id', $params['id']);
         }
 
         $sql       = new Sql($this->db);
@@ -94,18 +96,19 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         // Set where
         $columns = ['count' => new Expression('count(*)')];
-        $where   = ['receiver_id IN (' . $params['user_id'] . ') OR  sender_id IN (' . $params['user_id'] . ') OR type="global" '];
-        if (isset($params['status']) && !empty($params['status'])) {
-            $where['status'] = $params['status'];
+        $where   = new Where();
+        $where->nest()->equalTo('receiver_id', $params['user_id'])->or->equalTo('type', 'global')->unnest();
+        if (!empty($params['status'])) {
+            $where->equalTo('status', $params['status']);
         }
-        if (isset($params['viewed']) && !empty($params['viewed'])) {
-            $where['viewed'] = $params['viewed'];
+        if (!empty($params['viewed'])) {
+            $where->equalTo('viewed', $params['viewed']);
         }
-        if (isset($params['sent']) && !empty($params['sent'])) {
-            $where['sent'] = $params['sent'];
+        if (!empty($params['sent'])) {
+            $where->equalTo('sent', $params['sent']);
         }
-        if (isset($params['id']) && !empty($params['id'])) {
-            $where['id'] = $params['id'];
+        if (!empty($params['id'])) {
+            $where->equalTo('id', $params['id']);
         }
 
         $sql       = new Sql($this->db);
@@ -125,9 +128,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         // Set where
         $columns = ['count' => new Expression('count(*)')];
-        $where   = [
-            'viewed' => 0,
-        ];
+        $where   = ['viewed' => 0];
         if (isset($params['user_id']) && !empty($params['user_id'])) {
             $where['receiver_id'] = $params['user_id'];
         }
@@ -208,6 +209,7 @@ class NotificationRepository implements NotificationRepositoryInterface
     }
 
     /**
+     * @param int   $notificationId
      * @param array $params
      *
      * @return array|object
